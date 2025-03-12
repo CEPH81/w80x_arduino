@@ -123,7 +123,7 @@ extern "C"
          * @note
          */
         void begin();
-
+		void end();
         /**
          * @brief       Sets the data rate in bits per second (baud)
          *              for serial data transmission. For communicating

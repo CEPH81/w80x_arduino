@@ -149,7 +149,37 @@ void HardwareSerial::begin()
 {
     begin(115200);
 }
+void HardwareSerial::end()
+{
+    this->huart_handle = uart_devices[this->uart_num];
 
+    switch (this->uart_num)
+    {
+    case 0:
+        this->huart_handle->Instance = UART0;
+        break;
+    case 1:
+        this->huart_handle->Instance = UART1;
+        break;
+    case 2:
+        this->huart_handle->Instance = UART2;
+        break;
+    case 3:
+        this->huart_handle->Instance = UART3;
+        break;
+    case 4:
+        this->huart_handle->Instance = UART4;
+        break;
+    case 5:
+        this->huart_handle->Instance = UART5;
+        break;
+    }
+		while(this->huart_handle->gState != HAL_UART_STATE_READY){;}
+		__HAL_UART_DISABLE(this->huart_handle);
+		HAL_UART_DeInit(this->huart_handle);
+        _initalized = false;
+
+}
 /**
  * @brief       Sets the data rate in bits per second (baud)
  *              for serial data transmission. For communicating
