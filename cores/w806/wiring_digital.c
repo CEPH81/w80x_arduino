@@ -125,3 +125,37 @@ void digitalToggle(uint8_t pin)
     port->data ^= gpio_mask(pin);
     csi_irq_restore(flags);
 }
+
+int w80x_pin_func_fun(uint8_t pin, uint8_t func)
+{
+    for (unsigned i = 0; i < W80X_PIN_FUNCS_COUNT; i++) {
+        if (w80x_pin_funcs[i].pin == pin && w80x_pin_funcs[i].func == func) {
+            return w80x_pin_funcs[i].fun;
+        }
+    }
+    return -1;
+}
+
+bool w80x_pin_attach_func(uint8_t pin, uint8_t func)
+{
+    int fun = w80x_pin_func_fun(pin, func);
+    if (fun < 0 || !w80x_pin_valid(pin)) {
+        return false;
+    }
+    if (w80x_pin_state[pin] == W80X_PIN_PWM) {
+        w80x_pwm_detach(pin);
+    }
+    wm_drv_gpio_iomux_func_sel((wm_gpio_num_t)pin, (wm_gpio_pin_mux_t)fun);
+    w80x_pin_state[pin] = W80X_PIN_PERIPH;
+    return true;
+}
+
+void w80x_pin_release(uint8_t pin)
+{
+    if (!w80x_pin_valid(pin)) {
+        return;
+    }
+    w80x_pin_to_gpio(pin, false);
+    wm_drv_gpio_set_pullmode((wm_gpio_num_t)pin, WM_GPIO_FLOAT);
+    w80x_pin_state[pin] = W80X_PIN_UNUSED;
+}

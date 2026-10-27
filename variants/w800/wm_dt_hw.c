@@ -299,7 +299,7 @@ const static wm_dt_hw_eeprom_t dt_hw_eeprom1 = {
 const static wm_dt_hw_pin_cfg_t dt_hw_spim_pin[] = {
     { .pin_num = WM_GPIO_NUM_17, .pin_mux = WM_GPIO_IOMUX_FUN2 },
     { .pin_num = WM_GPIO_NUM_16, .pin_mux = WM_GPIO_IOMUX_FUN2 },
-    { .pin_num = WM_GPIO_NUM_7, .pin_mux = WM_GPIO_IOMUX_FUN2 },
+    { .pin_num = WM_GPIO_NUM_21, .pin_mux = WM_GPIO_IOMUX_FUN1 },
 };
 
 const static wm_dt_hw_spim_t dt_hw_spim = {

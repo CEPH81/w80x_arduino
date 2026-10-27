@@ -47,6 +47,26 @@ def pinmux_tables():
     return out
 
 
+FUNC_ORDER = ['W80X_F_I2C_SCL', 'W80X_F_I2C_SDA', 'W80X_F_SPI_CK', 'W80X_F_SPI_MOSI', 'W80X_F_SPI_MISO',
+              'W80X_F_SPI_CS'] + ['W80X_F_UART%d_%s' % (u, d) for u in range(6) for d in ('TX', 'RX')]
+FUNC_IDS = {'I2C_SCL': 'W80X_F_I2C_SCL', 'I2C_SDA': 'W80X_F_I2C_SDA', 'LSPI_CK': 'W80X_F_SPI_CK',
+            'LSPI_MOSI': 'W80X_F_SPI_MOSI', 'LSPI_MISO': 'W80X_F_SPI_MISO', 'LSPI_CS': 'W80X_F_SPI_CS'}
+FUNC_IDS.update({'UART%d_%s' % (u, d): 'W80X_F_UART%d_%s' % (u, d) for u in range(6) for d in ('TX', 'RX')})
+
+
+def spi_pins(variant, pins):
+    """patas SPI de la placa (variant.h) con su funcion L-SPI"""
+    txt = open(os.path.join(PLAT, 'variants', variant, 'variant.h'), encoding='utf-8').read()
+    out = []
+    for name, f in (('SCK', 'L-SPI_CK'), ('MISO', 'L-SPI_MISO'), ('MOSI', 'L-SPI_MOSI')):
+        m = re.search(r'#define PIN_SPI_%s\s+\(?(P[AB]\d+)' % name, txt)
+        pad = m.group(1)
+        num = (0 if pad[1] == 'A' else 16) + int(pad[2:])
+        fun = pins[num][1].index(f) + 1
+        out.append((num, fun))
+    return out
+
+
 def gen_pins_mux(variant, soc, pins):
     n = max(pins) + 1
     lines = []
@@ -66,6 +86,15 @@ def gen_pins_mux(variant, soc, pins):
         lines.append('    { 1, 0x%X, 0x%X, 0x%X },    /* %2d %-4s %s */' % (
             pwm_ch, pwm_fun, adc_ch, num, pad, ', '.join(x for x in funs if x)))
     body = '\n'.join(lines)
+    funcs = []
+    for num in sorted(pins):
+        pad, fl = pins[num]
+        for i, f in enumerate(fl[:4]):
+            k = FUNC_IDS.get(f.replace('-', '').replace('HSPI', 'H-SPI'))
+            if k:
+                funcs.append('    { %2d, %d, %s },  /* %s %s */' % (num, i + 1, k, pad, f))
+    fbody = '\n'.join(funcs)
+    fenum = ',\n'.join('    ' + v for v in sorted(set(FUNC_IDS.values()), key=FUNC_ORDER.index))
     return f'''/*
  * pins_mux.h - funciones de cada pata del {soc.upper()} ({variant})
  * Generado por tools/sdk_builder/gen_variants.py a partir de la
@@ -89,11 +118,27 @@ static const w80x_pin_mux_t w80x_pin_mux[W80X_PIN_MUX_COUNT] = {{
 {body}
 }};
 
+/* funciones de periferico (FUN1..FUN4) de cada pata, para Wire, SPI y Serial */
+enum {{
+{fenum}
+}};
+
+typedef struct {{
+    uint8_t pin;
+    uint8_t fun;  /* WM_GPIO_IOMUX_FUNx */
+    uint8_t func; /* W80X_F_... */
+}} w80x_pin_func_t;
+
+static const w80x_pin_func_t w80x_pin_funcs[] = {{
+{fbody}
+}};
+#define W80X_PIN_FUNCS_COUNT (sizeof(w80x_pin_funcs) / sizeof(w80x_pin_funcs[0]))
+
 #endif
 '''
 
 
-def gen_dt(soc, adc_channels):
+def gen_dt(soc, adc_channels, spi=None):
     src = open(os.path.join(PLAT, 'sdk', soc, 'device_table', 'wm_dt_hw.c'), encoding='utf-8').read()
 
     def empty(array, typ, count_field, ptr_field):
@@ -120,6 +165,12 @@ def gen_dt(soc, adc_channels):
     src, k = re.subn(r'(const static wm_dt_hw_adc_cfg_t dt_hw_adc_adc_cfg\[\] = \{\n).*?(\};)',
                      lambda m: m.group(1) + chans + m.group(2), src, flags=re.S)
     assert k == 1
+    # SPI: las patas de la placa (PIN_SPI_* de variant.h); CS lo maneja el programa
+    if spi:
+        body = ''.join('    { .pin_num = WM_GPIO_NUM_%d, .pin_mux = WM_GPIO_IOMUX_FUN%d },\n' % p for p in spi)
+        src, k = re.subn(r'(const static wm_dt_hw_pin_cfg_t dt_hw_spim_pin\[\] = \{\n).*?(\};)',
+                         lambda m: m.group(1) + body + m.group(2), src, flags=re.S)
+        assert k == 1
     # UART: solo TX y RX (sin RTS/CTS, que quitarian patas a otros puertos)
     def two_pins(m):
         pins = re.findall(r'    \{ \.pin_num.*?\},\n', m.group(2))
@@ -215,7 +266,7 @@ def main():
         adc = sorted({int(f[4:]) for _, funs in pins.values() for f in funs if re.fullmatch(r'ADC_\d', f)})
         d = os.path.join(PLAT, 'variants', variant)
         open(os.path.join(d, 'pins_mux.h'), 'w', encoding='utf-8').write(gen_pins_mux(variant, soc, pins))
-        dt = gen_dt(soc, adc)
+        dt = gen_dt(soc, adc, spi_pins(variant, pins))
         open(os.path.join(d, 'wm_dt_hw.c'), 'w', encoding='utf-8').write(dt)
         open(os.path.join(d, 'pins_arduino.h'), 'w', encoding='utf-8').write(gen_pins_arduino(variant, soc, pins, dt))
         print('%-7s %-6s %2d patas, ADC %s' % (variant, soc, len(pins), adc))

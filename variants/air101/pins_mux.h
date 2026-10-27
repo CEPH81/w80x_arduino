@@ -57,4 +57,58 @@ static const w80x_pin_mux_t w80x_pin_mux[W80X_PIN_MUX_COUNT] = {
     { 1, 0x1, 0x2, 0xF },    /* 36 PB20 UART0_RX, PWM1, UART1_CTS, I2C_SCL, GPIO */
 };
 
+/* funciones de periferico (FUN1..FUN4) de cada pata, para Wire, SPI y Serial */
+enum {
+    W80X_F_I2C_SCL,
+    W80X_F_I2C_SDA,
+    W80X_F_SPI_CK,
+    W80X_F_SPI_MOSI,
+    W80X_F_SPI_MISO,
+    W80X_F_SPI_CS,
+    W80X_F_UART0_TX,
+    W80X_F_UART0_RX,
+    W80X_F_UART1_TX,
+    W80X_F_UART1_RX,
+    W80X_F_UART2_TX,
+    W80X_F_UART2_RX,
+    W80X_F_UART3_TX,
+    W80X_F_UART3_RX,
+    W80X_F_UART4_TX,
+    W80X_F_UART4_RX,
+    W80X_F_UART5_TX,
+    W80X_F_UART5_RX
+};
+
+typedef struct {
+    uint8_t pin;
+    uint8_t fun;  /* WM_GPIO_IOMUX_FUNx */
+    uint8_t func; /* W80X_F_... */
+} w80x_pin_func_t;
+
+static const w80x_pin_func_t w80x_pin_funcs[] = {
+    {  0, 2, W80X_F_SPI_CS },  /* PA0 L-SPI_CS */
+    {  1, 2, W80X_F_I2C_SCL },  /* PA1 I2C_SCL */
+    {  4, 2, W80X_F_I2C_SDA },  /* PA4 I2C_SDA */
+    {  7, 2, W80X_F_SPI_MOSI },  /* PA7 L-SPI_MOSI */
+    { 16, 2, W80X_F_SPI_MISO },  /* PB0 L-SPI_MISO */
+    { 16, 3, W80X_F_UART3_TX },  /* PB0 UART3_TX */
+    { 17, 2, W80X_F_SPI_CK },  /* PB1 L-SPI_CK */
+    { 17, 3, W80X_F_UART3_RX },  /* PB1 UART3_RX */
+    { 18, 2, W80X_F_SPI_CK },  /* PB2 L-SPI_CK */
+    { 18, 3, W80X_F_UART2_TX },  /* PB2 UART2_TX */
+    { 19, 2, W80X_F_SPI_MISO },  /* PB3 L-SPI_MISO */
+    { 19, 3, W80X_F_UART2_RX },  /* PB3 UART2_RX */
+    { 20, 1, W80X_F_SPI_CS },  /* PB4 L-SPI_CS */
+    { 20, 3, W80X_F_UART4_TX },  /* PB4 UART4_TX */
+    { 21, 1, W80X_F_SPI_MOSI },  /* PB5 L-SPI_MOSI */
+    { 21, 3, W80X_F_UART4_RX },  /* PB5 UART4_RX */
+    { 22, 1, W80X_F_UART1_TX },  /* PB6 UART1_TX */
+    { 23, 1, W80X_F_UART1_RX },  /* PB7 UART1_RX */
+    { 35, 1, W80X_F_UART0_TX },  /* PB19 UART0_TX */
+    { 35, 4, W80X_F_I2C_SDA },  /* PB19 I2C_SDA */
+    { 36, 1, W80X_F_UART0_RX },  /* PB20 UART0_RX */
+    { 36, 4, W80X_F_I2C_SCL },  /* PB20 I2C_SCL */
+};
+#define W80X_PIN_FUNCS_COUNT (sizeof(w80x_pin_funcs) / sizeof(w80x_pin_funcs[0]))
+
 #endif

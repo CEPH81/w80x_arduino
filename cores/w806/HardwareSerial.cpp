@@ -32,7 +32,7 @@ HardwareSerial::HardwareSerial(uint8_t port)
 {
 }
 
-void HardwareSerial::begin(unsigned long baud, uint32_t config)
+void HardwareSerial::begin(unsigned long baud, uint32_t config, int8_t rxPin, int8_t txPin)
 {
     char name[6] = { 'u', 'a', 'r', 't', (char)('0' + _port), 0 };
     wm_device_t *dev = wm_dt_get_device_by_name(name);
@@ -61,6 +61,22 @@ void HardwareSerial::begin(unsigned long baud, uint32_t config)
         uint8_t p = hw->pin_cfg[i].pin_num;
         if (p < W80X_PIN_MUX_COUNT) {
             w80x_pin_state[p] = W80X_PIN_PERIPH;
+        }
+    }
+    /* otras patas: se liberan las del arbol de dispositivos y se asignan las nuevas */
+    if (rxPin >= 0 || txPin >= 0) {
+        uint8_t ftx = W80X_F_UART0_TX + 2 * _port, frx = ftx + 1;
+        int8_t tx = txPin >= 0 ? txPin : (hw->pin_cfg_count > 0 ? hw->pin_cfg[0].pin_num : -1);
+        int8_t rx = rxPin >= 0 ? rxPin : (hw->pin_cfg_count > 1 ? hw->pin_cfg[1].pin_num : -1);
+        if ((tx < 0 || w80x_pin_func_fun(tx, ftx) >= 0) && (rx < 0 || w80x_pin_func_fun(rx, frx) >= 0)) {
+            for (int i = 0; i < hw->pin_cfg_count; i++) {
+                uint8_t p = hw->pin_cfg[i].pin_num;
+                if (p != tx && p != rx) {
+                    w80x_pin_release(p);
+                }
+            }
+            if (tx >= 0) w80x_pin_attach_func(tx, ftx);
+            if (rx >= 0) w80x_pin_attach_func(rx, frx);
         }
     }
     _baud = baud;

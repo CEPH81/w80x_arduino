@@ -45,7 +45,7 @@
 
 #endif // Sd2PinMap_h
 
-#elif (defined(ARDUINO_HLK_w80x))
+#elif (defined(ARDUINO_HLK_w80x) || defined(ARDUINO_ARCH_W80X))
 #ifndef Sd2PinMap_h
   #define Sd2PinMap_h
 

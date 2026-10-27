@@ -34,6 +34,13 @@ static inline bool w80x_pin_valid(uint8_t pin)
 void w80x_pin_to_gpio(uint8_t pin, bool output);
 /* detiene el PWM de la pata si lo tiene */
 void w80x_pwm_detach(uint8_t pin);
+/* numero de funcion del multiplexor (FUN1..FUN4) de "func" (W80X_F_...) en la
+   pata, o -1 si esa pata no la tiene */
+int w80x_pin_func_fun(uint8_t pin, uint8_t func);
+/* asigna la pata a la funcion de periferico (true si se pudo) */
+bool w80x_pin_attach_func(uint8_t pin, uint8_t func);
+/* devuelve la pata a GPIO de entrada sin resistencias */
+void w80x_pin_release(uint8_t pin);
 /* inicializacion del nucleo (antes de setup) */
 void w80x_init_digital(void);
 

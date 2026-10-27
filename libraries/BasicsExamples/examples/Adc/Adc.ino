@@ -1,27 +1,16 @@
-#include "Arduino.h"
 /*
- * HLK-W80x Analog read example.
- * 
- * W80x boards has four analog ports.
- * You can access it from Arduino code by pin numbers PA1-PA4
- * or by short names A1-A4.
- * 
- * Name A0 is alias to A1, added for compatibility.
- * 
+ * Lectura analogica en W80x: A1..A4 (PA1..PA4; A0 = A1). En W800/Air101: A0 (PA1) y A1 (PA4).
+ * Entrada de 0 a 2,4 V.
+ *   analogRead()            -> 0..4095 (12 bits; analogReadResolution() lo cambia)
+ *   analogReadMilliVolts()  -> milivoltios (calibracion de fabrica)
  */
-void setup()
-{
-pinMode(A2,ANALOG_INPUT);  // or pinMode(PA2,ANALOG_INPUT);
-Serial.begin(115200);
+void setup() {
+  Serial.begin(115200);
 }
 
-
-void loop()
-{
-float volt = 0;
-volt = analogRead(A2);
-Serial.printf("ADC millivolt [%f]\r\n", volt);
-delay (1000);
+void loop() {
+  int crudo = analogRead(A0);
+  uint32_t mv = analogReadMilliVolts(A0);
+  Serial.printf("ADC: %d  (%u mV)  temperatura interna %.1f C\n", crudo, mv, temperatureRead());
+  delay(1000);
 }
-
-

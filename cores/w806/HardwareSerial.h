@@ -60,7 +60,8 @@ class HardwareSerial : public Stream
 public:
     explicit HardwareSerial(uint8_t port);
 
-    void begin(unsigned long baud = 115200, uint32_t config = SERIAL_8N1);
+    /* rxPin/txPin: otras patas para el puerto (ver pins_mux.h), -1 = por defecto */
+    void begin(unsigned long baud = 115200, uint32_t config = SERIAL_8N1, int8_t rxPin = -1, int8_t txPin = -1);
     void end();
     void updateBaudRate(unsigned long baud);
     unsigned long baudRate();
