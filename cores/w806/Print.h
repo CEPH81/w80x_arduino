@@ -1,21 +1,21 @@
-/**
- * @file Print.h 
- *
- * @brief   Print Module
- *
- * @author Huang Leilei
- *
- * Copyright (c) 2019 Winner Microelectronics Co., Ltd.
- */
-#ifndef _wiring_PRINT_H_
-#define _wiring_PRINT_H_
+/*
+  Print.h - Base class that provides print() and println()
+  Copyright (c) 2008 David A. Mellis.  All right reserved.
+  Adaptado al nucleo W80x (WM IoT SDK): printf(), flush(), 64 bits.
 
-#include <string.h>
-#include <stdio.h>
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+*/
+#ifndef Print_h
+#define Print_h
+
 #include <stdint.h>
-#include <Common.h>
+#include <stddef.h>
+#include <string.h>
+#include <stdarg.h>
 
-#include "debug.h"
 #include "WString.h"
 #include "Printable.h"
 
@@ -28,280 +28,65 @@ class Print
 {
 private:
     int write_error;
-    size_t printNumber(unsigned long, uint8_t );
+    size_t printNumber(unsigned long, uint8_t);
+    size_t printULLNumber(unsigned long long, uint8_t);
     size_t printFloat(double, uint8_t);
 
 protected:
-    void setWriteError( int err = 1 ) { write_error = err; }
-    
+    void setWriteError(int err = 1) { write_error = err; }
+
 public:
     Print() : write_error(0) {}
-    /**
-     * @brief       This function is used to get write error number.
-     * @param[in] None
-     *
-     * @return      The write error set by the object.
-     * 
-     * @note 
-     */ 
+    virtual ~Print() {}
+
     int getWriteError() { return write_error; }
-    /**
-     * @brief       This function is used to clear write error number.
-     * @param[in] None
-     *
-     * @return      None 
-     * 
-     * @note 
-     */ 
     void clearWriteError() { setWriteError(0); }
-    
-    /**
-     * @brief       This pure virtual function is used to define the operation that writes binary data.
-     * @param[in] val: a value to send as a single byte
-     * @return      The length of write successfully (1 byte).
-     * 
-     * @note 
-     */ 
-    virtual size_t write(uint8_t c) = 0;
-    /**
-     * @brief       This function is used to write buffer to the interface defined by the object.
-     * @param[in] buffer Specify the buffer.
-     * @param[in] size Specify the size.
-     *
-     * @return      The length of write successfully. 
-     * 
-     * @note 
-     */ 
+
+    virtual size_t write(uint8_t) = 0;
     virtual size_t write(const uint8_t *buffer, size_t size);
-    /**
-     * @brief       This function is used to write buffer to the interface defined by the object.
-     * @param[in] str Specify the buffer of string.
-     *
-     * @return      The length of write successfully. 
-     * 
-     * @note 
-     */ 
     size_t write(const char *str)
     {
-        if (NULL == str) return 0;
+        if (str == NULL) return 0;
         return write((const uint8_t *)str, strlen(str));
     }
-    /**
-     * @brief       This function is used to write buffer to the interface defined by the object.
-     * @param[in] buffer Specify the buffer of string.
-     * @param[in] size Specify the size.
-     *
-     * @return      The length of write successfully. 
-     * 
-     * @note 
-     */ 
-    size_t write(const char *buffer, size_t size)
-    { return write((const uint8_t *)buffer, size); }
+    size_t write(const char *buffer, size_t size) { return write((const uint8_t *)buffer, size); }
 
-    /**
-     * @brief       This function is used to print buffer to the interface defined by the object.
-     * @param[in] s Specify the String.
-     *
-     * @return      The length of print successfully. 
-     * 
-     * @note 
-     */ 
-    size_t print( const String & );
-    size_t print(const __FlashStringHelper *rhs);
-    /**
-     * @brief       This function is used to print buffer to the interface defined by the object.
-     * @param[in] s Specify the string buffer.
-     *
-     * @return      The length of print successfully. 
-     * 
-     * @note 
-     */ 
-    size_t print(const char []);
-    /**
-     * @brief       This function is used to print buffer to the interface defined by the object.
-     * @param[in] c Specify the target - char.
-     *
-     * @return      The length of print successfully (1 byte). 
-     * 
-     * @note 
-     */ 
+    // espacio libre en el buffer de salida (0: desconocido)
+    virtual int availableForWrite() { return 0; }
+    // espera a que se envie todo
+    virtual void flush() {}
+
+    size_t printf(const char *format, ...) __attribute__((format(printf, 2, 3)));
+    size_t vprintf(const char *format, va_list arg);
+
+    size_t print(const __FlashStringHelper *);
+    size_t print(const String &);
+    size_t print(const char[]);
     size_t print(char);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object.
-     * @param[in] b Specify the target - char.
-     * @param[in] base Specify the base.
-     *
-     * @return      The length of print successfully. 
-     * 
-     * @note 
-     */ 
     size_t print(unsigned char, int = DEC);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object.
-     * @param[in] n Specify the target - int.
-     * @param[in] base Specify the base.
-     *
-     * @return      The length of print successfully. 
-     * 
-     * @note 
-     */ 
     size_t print(int, int = DEC);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object.
-     * @param[in] n Specify the target - unsigned int.
-     * @param[in] base Specify the base.
-     *
-     * @return      The length of print successfully. 
-     * 
-     * @note 
-     */ 
     size_t print(unsigned int, int = DEC);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object.
-     * @param[in] n Specify the target - long.
-     * @param[in] base Specify the base.
-     *
-     * @return      The length of print successfully. 
-     * 
-     * @note 
-     */ 
     size_t print(long, int = DEC);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object.
-     * @param[in] n Specify the target - unsigned long.
-     * @param[in] base Specify the base.
-     *
-     * @return      The length of print successfully. 
-     * 
-     * @note 
-     */ 
     size_t print(unsigned long, int = DEC);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object.
-     * @param[in] n Specify the target - double.
-     * @param[in] digits Specify the digits.
-     *
-     * @return      The length of print successfully. 
-     * 
-     * @note 
-     */ 
-    size_t print(double, int = BIN);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object.
-     * @param[in] x Specify the target - Printable.
-     *
-     * @return      The length of print successfully. 
-     * 
-     * @note 
-     */ 
+    size_t print(long long, int = DEC);
+    size_t print(unsigned long long, int = DEC);
+    size_t print(double, int = 2);
     size_t print(const Printable &);
-    
-    /**
-     * @brief       This function is used to print target to the interface defined by the object with carriage ret ('\r') and new line ('\n').
-     * @param[in] None
-     *
-     * @return      The length of print successfully. 
-     * 
-     * @note 
-     */ 
-    size_t println(void);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object with carriage ret ('\r') and new line ('\n').
-     * @param[in] s Specify the String.
-     *
-     * @return      The length of print successfully.  
-     * 
-     * @note 
-     */ 
+
+    size_t println(const __FlashStringHelper *);
     size_t println(const String &s);
-    size_t println(const __FlashStringHelper *rhs);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object with carriage ret ('\r') and new line ('\n').
-     * @param[in] c Specify the string buffer.
-     *
-     * @return      The length of print successfully.  
-     * 
-     * @note 
-     */ 
-    size_t println(const char []);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object with carriage ret ('\r') and new line ('\n').
-     * @param[in] c Specify the target - char.
-     *
-     * @return      The length of print successfully.  
-     * 
-     * @note 
-     */ 
+    size_t println(const char[]);
     size_t println(char);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object with carriage ret ('\r') and new line ('\n').
-     * @param[in] n Specify the target - int.
-     * @param[in] base Specify the base.
-     *
-     * @return      The length of print successfully.  
-     * 
-     * @note 
-     */ 
     size_t println(unsigned char, int = DEC);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object with carriage ret ('\r') and new line ('\n').
-     * @param[in] num Specify the target - int.
-     * @param[in] base Specify the base.
-     *
-     * @return      The length of print successfully.  
-     * 
-     * @note 
-     */ 
     size_t println(int, int = DEC);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object with carriage ret ('\r') and new line ('\n').
-     * @param[in] num Specify the target - unsigned int.
-     * @param[in] base Specify the base.
-     *
-     * @return      The length of print successfully.  
-     * 
-     * @note 
-     */ 
     size_t println(unsigned int, int = DEC);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object with carriage ret ('\r') and new line ('\n').
-     * @param[in] num Specify the target - long.
-     * @param[in] base Specify the base.
-     *
-     * @return      The length of print successfully.  
-     * 
-     * @note 
-     */ 
     size_t println(long, int = DEC);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object with carriage ret ('\r') and new line ('\n').
-     * @param[in] num Specify the target - unsigned long.
-     * @param[in] base Specify the base.
-     *
-     * @return      The length of print successfully.  
-     * 
-     * @note 
-     */ 
     size_t println(unsigned long, int = DEC);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object with carriage ret ('\r') and new line ('\n').
-     * @param[in] num Specify the target - double.
-     * @param[in] digits Specify the digits.
-     *
-     * @return      The length of print successfully.  
-     * 
-     * @note 
-     */ 
-    size_t println(double, int = BIN);
-    /**
-     * @brief       This function is used to print target to the interface defined by the object with carriage ret ('\r') and new line ('\n').
-     * @param[in] x Specify the target - Printable.
-     *
-     * @return      The length of print successfully.  
-     * 
-     * @note 
-     */ 
+    size_t println(long long, int = DEC);
+    size_t println(unsigned long long, int = DEC);
+    size_t println(double, int = 2);
     size_t println(const Printable &);
+    size_t println(void);
 };
 
 #endif

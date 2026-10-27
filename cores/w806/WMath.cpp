@@ -1,56 +1,60 @@
-/* -*- mode: jde; c-basic-offset: 2; indent-tabs-mode: nil -*- */
-
 /*
-  Part of the Wiring project - http://wiring.org.co
+  WMath.cpp - Part of the Wiring project - http://wiring.org.co
   Copyright (c) 2004-06 Hernando Barragan
   Modified 13 August 2006, David A. Mellis for Arduino - http://www.arduino.cc/
-  
+  W80x: random() usa el generador de numeros aleatorios por hardware si no
+  se ha llamado a randomSeed().
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
   version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-
-  You should have received a copy of the GNU Lesser General
-  Public License along with this library; if not, write to the
-  Free Software Foundation, Inc., 59 Temple Place, Suite 330,
-  Boston, MA  02111-1307  USA
 */
+#include "Arduino.h"
 
-extern "C" {
-  #include "stdlib.h"
-  #include "stdint.h"
+static bool seeded = false;
+
+void randomSeed(unsigned long seed)
+{
+    if (seed != 0) {
+        srand(seed);
+        seeded = true;
+    }
 }
 
-void randomSeed(uint32_t seed)
+static uint32_t rnd32()
 {
-  if (seed != 0) {
-    srand(seed);
-  }
+    if (seeded) {
+        return ((uint32_t)rand() << 16) ^ (uint32_t)rand();
+    }
+    return w80x_random();
 }
 
-int32_t random(int32_t howbig)
+long random(long howbig)
 {
-  if (howbig == 0) {
-    return 0;
-  }
-  return rand() % howbig;
+    if (howbig <= 0) {
+        return 0;
+    }
+    return rnd32() % (uint32_t)howbig;
 }
 
-int32_t random(int32_t howsmall, int32_t howbig)
+long random(long howsmall, long howbig)
 {
-  return ((howsmall) + (int32_t) ((howbig) - (howsmall)) * rand() / 32768);
-   
+    if (howsmall >= howbig) {
+        return howsmall;
+    }
+    return random(howbig - howsmall) + howsmall;
 }
 
-int32_t map(int32_t x, int32_t in_min, int32_t in_max, int32_t out_min, int32_t out_max)
+long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    if (in_max == in_min) {
+        return out_min;
+    }
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 uint16_t makeWord(uint16_t w) { return w; }
-uint16_t makeWord(unsigned char h, unsigned char l) { return (h << 8) | l; }
+uint16_t makeWord(uint8_t h, uint8_t l) { return (h << 8) | l; }
+
+unsigned long pulseIn(uint8_t pin, uint8_t state) { return pulseIn(pin, state, 1000000UL); }

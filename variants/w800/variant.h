@@ -12,8 +12,5 @@
 #define PIN_SPI_MISO  (PB0)
 #define PIN_SPI_MOSI  (PB5)
 
-#define PINS_COUNT  (44U) // pins in total, PB19, PB20 and PB23 are not used
-#define ADC_COUNT   (4U)  // number of ADC channels
-#define PWM_COUNT   (5U)  // number of PWM channels
 
 #endif /* _VARIANT_ARDUINO_W800_ */

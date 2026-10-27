@@ -4,8 +4,6 @@
 #ifdef __cplusplus
 extern "C"{
 #endif
-// Not implemented yet
-int atoi(const char *s);
 
 //long atol(const char* s);
 

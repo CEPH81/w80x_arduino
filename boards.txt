@@ -1,336 +1,387 @@
-# See: http://code.google.com/p/arduino/wiki/Platforms
+# Placas W80x (WM IoT SDK). Generado por tools/sdk_builder/gen_boards.py
 
-menu.cpu_frq=CPU Frequency
-#menu.cpu_variant=CPU
-menu.opt=Build mode
-menu.upload_speed=Upload Speed
-menu.erase=Erase Flash
-#menu.os_variant=OS
+menu.cpu_frq=Frecuencia de CPU
+menu.opt=Optimizacion
+menu.upload_method=Metodo de carga
+menu.upload_speed=Velocidad de carga
+menu.erase=Borrar flash
+menu.log=Mensajes del SDK
 
-##############################################################
-air101.name=Air101
-air101.upload.tool=serial_upload
-air101.upload.protocol=xmodem
-air101.upload.maximum_size=2048576
-air101.upload.maximum_data_size=294912
-air101.build.mcu=ck804ef
-air101.build.board=XT804_Air101
-air101.build.core=w806
-air101.build.variant=air101
-air101.build.mcpu=ck804ef
-air101.serial.disableRTS=true
-#---------------------------------------
-# CPU Frequency
-air101.menu.cpu_frq.240MHZ=240MHZ
-air101.menu.cpu_frq.240MHZ.build.f_cpu=240000000
-air101.menu.cpu_frq.160MHZ=160MHZ
-air101.menu.cpu_frq.160MHZ.build.f_cpu=160000000
-air101.menu.cpu_frq.80MHZ=80MHZ
-air101.menu.cpu_frq.80MHZ.build.f_cpu=80000000
-air101.menu.cpu_frq.40MHZ=40MHZ
-air101.menu.cpu_frq.40MHZ.build.f_cpu=40000000
-air101.menu.cpu_frq.2MHZ=2MHZ
-air101.menu.cpu_frq.2MHZ.build.f_cpu=2000000
-#---------------------------------------
-# Release /Optimise
-air101.menu.opt.default=Default (-O2 -g3)
-air101.menu.opt.maxspeed=Maximum speed (-O3)
-air101.menu.opt.maxspeed.build.flags.optimize=-O3
-air101.menu.opt.minsize=Minimum code size ( -Os)
-air101.menu.opt.minsize.build.flags.optimize=-Os
-air101.menu.opt.debug=Debug (-g)
-air101.menu.opt.debug.build.flags.optimize=-Og
-
-#---------------------------------------
-# Upload Speed
-air101.menu.upload_speed.baud115200=115200
-air101.menu.upload_speed.baud115200.upload.speed=115200
-air101.menu.upload_speed.baud460800=460800
-air101.menu.upload_speed.baud460800.upload.speed=460800
-air101.menu.upload_speed.baud921600=921600
-air101.menu.upload_speed.baud921600.upload.speed=921600
-air101.menu.upload_speed.baud1000000=1000000
-air101.menu.upload_speed.baud1000000.upload.speed=1000000
-air101.menu.upload_speed.baud2000000=2000000
-air101.menu.upload_speed.baud2000000.upload.speed=2000000
-#---------------------------------------
-# Erase Flash
-air101.menu.erase.yes=erase all flash
-air101.menu.erase.yes.erase.flash=all
-air101.menu.erase.no=no erase
-air101.menu.erase.no.erase.flash=none
-##############################################################
-
-##############################################################
-w800.name=W800
-w800.upload.tool=serial_upload
-w800.upload.protocol=xmodem
-w800.upload.maximum_size=2048576
-w800.upload.maximum_data_size=294912
-w800.build.mcu=ck804ef
-w800.build.board=XT804_W800
+######################################################################
+w800.name=W800 (HLK-W800-KIT)
+w800.build.board=W800
 w800.build.core=w806
 w800.build.variant=w800
-w800.build.mcpu=ck804ef
+w800.build.soc=w800
+w800.build.mcu=ck804ef
+w800.upload.maximum_size=1969152
+w800.upload.maximum_data_size=163840
+w800.upload.erase=
 w800.serial.disableRTS=true
-#---------------------------------------
-# CPU Frequency
-w800.menu.cpu_frq.240MHZ=240MHZ
-w800.menu.cpu_frq.240MHZ.build.f_cpu=240000000
-w800.menu.cpu_frq.160MHZ=160MHZ
-w800.menu.cpu_frq.160MHZ.build.f_cpu=160000000
-w800.menu.cpu_frq.80MHZ=80MHZ
-w800.menu.cpu_frq.80MHZ.build.f_cpu=80000000
-w800.menu.cpu_frq.40MHZ=40MHZ
-w800.menu.cpu_frq.40MHZ.build.f_cpu=40000000
-w800.menu.cpu_frq.2MHZ=2MHZ
-w800.menu.cpu_frq.2MHZ.build.f_cpu=2000000
-#---------------------------------------
-# Release /Optimise
-w800.menu.opt.default=Default (-O2 -g3)
-w800.menu.opt.maxspeed=Maximum speed (-O3)
-w800.menu.opt.maxspeed.build.flags.optimize=-O3
-w800.menu.opt.minsize=Minimum code size ( -Os)
-w800.menu.opt.minsize.build.flags.optimize=-Os
-w800.menu.opt.debug=Debug (-g)
+w800.serial.disableDTR=true
+w800.menu.cpu_frq.240MHZ=240 MHz
+w800.menu.cpu_frq.240MHZ.build.f_cpu=240000000L
+w800.menu.cpu_frq.160MHZ=160 MHz
+w800.menu.cpu_frq.160MHZ.build.f_cpu=160000000L
+w800.menu.cpu_frq.120MHZ=120 MHz
+w800.menu.cpu_frq.120MHZ.build.f_cpu=120000000L
+w800.menu.cpu_frq.80MHZ=80 MHz
+w800.menu.cpu_frq.80MHZ.build.f_cpu=80000000L
+w800.menu.cpu_frq.40MHZ=40 MHz
+w800.menu.cpu_frq.40MHZ.build.f_cpu=40000000L
+w800.menu.opt.size=Tamano (-Os)
+w800.menu.opt.size.build.flags.optimize=-Os
+w800.menu.opt.o2=Velocidad (-O2)
+w800.menu.opt.o2.build.flags.optimize=-O2
+w800.menu.opt.o3=Maxima velocidad (-O3)
+w800.menu.opt.o3.build.flags.optimize=-O3
+w800.menu.opt.debug=Depuracion (-Og)
 w800.menu.opt.debug.build.flags.optimize=-Og
+w800.menu.upload_method.serial=Puerto serie (USB)
+w800.menu.upload_method.serial.upload.tool=serial_upload
+w800.menu.upload_method.serial.upload.protocol=serial
+w800.menu.upload_method.cklink=Depurador CK-Link (XuanTie Debugger Server)
+w800.menu.upload_method.cklink.upload.tool=cklink
+w800.menu.upload_method.cklink.upload.protocol=cklink
+w800.menu.upload_method.cklink.upload.require_upload_port=false
+w800.menu.upload_method.cklink.upload.use_1200bps_touch=false
+w800.menu.upload_method.cklink.upload.wait_for_upload_port=false
+w800.menu.upload_speed.2000000=2000000
+w800.menu.upload_speed.2000000.upload.speed=2000000
+w800.menu.upload_speed.1000000=1000000
+w800.menu.upload_speed.1000000.upload.speed=1000000
+w800.menu.upload_speed.921600=921600
+w800.menu.upload_speed.921600.upload.speed=921600
+w800.menu.upload_speed.460800=460800
+w800.menu.upload_speed.460800.upload.speed=460800
+w800.menu.upload_speed.115200=115200
+w800.menu.upload_speed.115200.upload.speed=115200
+w800.menu.erase.no=Solo el programa
+w800.menu.erase.all=Toda la flash (conserva la calibracion de RF)
+w800.menu.erase.all.upload.erase=-eo all
+w800.menu.log.warn=Avisos y errores
+w800.menu.log.warn.build.log_level=2
+w800.menu.log.none=Ninguno
+w800.menu.log.none.build.log_level=0
+w800.menu.log.error=Errores
+w800.menu.log.error.build.log_level=1
+w800.menu.log.info=Informacion
+w800.menu.log.info.build.log_level=3
+w800.menu.log.debug=Depuracion
+w800.menu.log.debug.build.log_level=4
 
-#---------------------------------------
-# Upload Speed
-w800.menu.upload_speed.baud115200=115200
-w800.menu.upload_speed.baud115200.upload.speed=115200
-w800.menu.upload_speed.baud460800=460800
-w800.menu.upload_speed.baud460800.upload.speed=460800
-w800.menu.upload_speed.baud921600=921600
-w800.menu.upload_speed.baud921600.upload.speed=921600
-w800.menu.upload_speed.baud1000000=1000000
-w800.menu.upload_speed.baud1000000.upload.speed=1000000
-w800.menu.upload_speed.baud2000000=2000000
-w800.menu.upload_speed.baud2000000.upload.speed=2000000
-#---------------------------------------
-# Erase Flash
-w800.menu.erase.yes=erase all flash
-w800.menu.erase.yes.erase.flash=all
-w800.menu.erase.no=no erase
-w800.menu.erase.no.erase.flash=none
-##############################################################
-
-##############################################################
-w801.name=W801
-w801.upload.tool=serial_upload
-w801.upload.protocol=xmodem
-w801.upload.maximum_size=2048576
-w801.upload.maximum_data_size=294912
-w801.build.mcu=ck804ef
-w801.build.board=XT804_W801
+######################################################################
+w801.name=W801 (HLK-W801-KIT)
+w801.build.board=W801
 w801.build.core=w806
 w801.build.variant=w801
-w801.build.mcpu=ck804ef
+w801.build.soc=w801s
+w801.build.mcu=ck804ef
+w801.upload.maximum_size=1969152
+w801.upload.maximum_data_size=163840
+w801.upload.erase=
 w801.serial.disableRTS=true
-#---------------------------------------
-# CPU Frequency
-w801.menu.cpu_frq.240MHZ=240MHZ
-w801.menu.cpu_frq.240MHZ.build.f_cpu=240000000
-w801.menu.cpu_frq.160MHZ=160MHZ
-w801.menu.cpu_frq.160MHZ.build.f_cpu=160000000
-w801.menu.cpu_frq.80MHZ=80MHZ
-w801.menu.cpu_frq.80MHZ.build.f_cpu=80000000
-w801.menu.cpu_frq.40MHZ=40MHZ
-w801.menu.cpu_frq.40MHZ.build.f_cpu=40000000
-w801.menu.cpu_frq.2MHZ=2MHZ
-w801.menu.cpu_frq.2MHZ.build.f_cpu=2000000
-#---------------------------------------
-# Release /Optimise
-w801.menu.opt.default=Default (-O2 -g3)
-#w801.menu.opt.release.build.flags.optimize=-Os -flto
-w801.menu.opt.maxspeed=Maximum speed (-O3)
-w801.menu.opt.maxspeed.build.flags.optimize=-O3
-w801.menu.opt.minsize=Minimum code size ( -Os)
-w801.menu.opt.minsize.build.flags.optimize=-Os
-w801.menu.opt.debug=Debug (-g)
+w801.serial.disableDTR=true
+w801.menu.cpu_frq.240MHZ=240 MHz
+w801.menu.cpu_frq.240MHZ.build.f_cpu=240000000L
+w801.menu.cpu_frq.160MHZ=160 MHz
+w801.menu.cpu_frq.160MHZ.build.f_cpu=160000000L
+w801.menu.cpu_frq.120MHZ=120 MHz
+w801.menu.cpu_frq.120MHZ.build.f_cpu=120000000L
+w801.menu.cpu_frq.80MHZ=80 MHz
+w801.menu.cpu_frq.80MHZ.build.f_cpu=80000000L
+w801.menu.cpu_frq.40MHZ=40 MHz
+w801.menu.cpu_frq.40MHZ.build.f_cpu=40000000L
+w801.menu.opt.size=Tamano (-Os)
+w801.menu.opt.size.build.flags.optimize=-Os
+w801.menu.opt.o2=Velocidad (-O2)
+w801.menu.opt.o2.build.flags.optimize=-O2
+w801.menu.opt.o3=Maxima velocidad (-O3)
+w801.menu.opt.o3.build.flags.optimize=-O3
+w801.menu.opt.debug=Depuracion (-Og)
 w801.menu.opt.debug.build.flags.optimize=-Og
+w801.menu.upload_method.serial=Puerto serie (USB)
+w801.menu.upload_method.serial.upload.tool=serial_upload
+w801.menu.upload_method.serial.upload.protocol=serial
+w801.menu.upload_method.cklink=Depurador CK-Link (XuanTie Debugger Server)
+w801.menu.upload_method.cklink.upload.tool=cklink
+w801.menu.upload_method.cklink.upload.protocol=cklink
+w801.menu.upload_method.cklink.upload.require_upload_port=false
+w801.menu.upload_method.cklink.upload.use_1200bps_touch=false
+w801.menu.upload_method.cklink.upload.wait_for_upload_port=false
+w801.menu.upload_speed.2000000=2000000
+w801.menu.upload_speed.2000000.upload.speed=2000000
+w801.menu.upload_speed.1000000=1000000
+w801.menu.upload_speed.1000000.upload.speed=1000000
+w801.menu.upload_speed.921600=921600
+w801.menu.upload_speed.921600.upload.speed=921600
+w801.menu.upload_speed.460800=460800
+w801.menu.upload_speed.460800.upload.speed=460800
+w801.menu.upload_speed.115200=115200
+w801.menu.upload_speed.115200.upload.speed=115200
+w801.menu.erase.no=Solo el programa
+w801.menu.erase.all=Toda la flash (conserva la calibracion de RF)
+w801.menu.erase.all.upload.erase=-eo all
+w801.menu.log.warn=Avisos y errores
+w801.menu.log.warn.build.log_level=2
+w801.menu.log.none=Ninguno
+w801.menu.log.none.build.log_level=0
+w801.menu.log.error=Errores
+w801.menu.log.error.build.log_level=1
+w801.menu.log.info=Informacion
+w801.menu.log.info.build.log_level=3
+w801.menu.log.debug=Depuracion
+w801.menu.log.debug.build.log_level=4
 
-#---------------------------------------
-# Upload Speed
-w801.menu.upload_speed.baud115200=115200
-w801.menu.upload_speed.baud115200.upload.speed=115200
-w801.menu.upload_speed.baud460800=460800
-w801.menu.upload_speed.baud460800.upload.speed=460800
-w801.menu.upload_speed.baud921600=921600
-w801.menu.upload_speed.baud921600.upload.speed=921600
-w801.menu.upload_speed.baud1000000=1000000
-w801.menu.upload_speed.baud1000000.upload.speed=1000000
-w801.menu.upload_speed.baud2000000=2000000
-w801.menu.upload_speed.baud2000000.upload.speed=2000000
-#---------------------------------------
-# Erase Flash
-w801.menu.erase.yes=erase all flash
-w801.menu.erase.yes.erase.flash=all
-w801.menu.erase.no=no erase
-w801.menu.erase.no.erase.flash=none
-##############################################################
-
-##############################################################
+######################################################################
 w802.name=W802
-w802.upload.tool=serial_upload
-w802.upload.protocol=xmodem
-w802.upload.maximum_size=2048576
-w802.upload.maximum_data_size=294912
-w802.build.mcu=ck804ef
-w802.build.board=XT804_W802
+w802.build.board=W802
 w802.build.core=w806
 w802.build.variant=w802
-w802.build.mcpu=ck804ef
+w802.build.soc=w802
+w802.build.mcu=ck804ef
+w802.upload.maximum_size=1969152
+w802.upload.maximum_data_size=163840
+w802.upload.erase=
 w802.serial.disableRTS=true
-#---------------------------------------
-# CPU Frequency
-w802.menu.cpu_frq.240MHZ=240MHZ
-w802.menu.cpu_frq.240MHZ.build.f_cpu=240000000
-w802.menu.cpu_frq.160MHZ=160MHZ
-w802.menu.cpu_frq.160MHZ.build.f_cpu=160000000
-w802.menu.cpu_frq.80MHZ=80MHZ
-w802.menu.cpu_frq.80MHZ.build.f_cpu=80000000
-w802.menu.cpu_frq.40MHZ=40MHZ
-w802.menu.cpu_frq.40MHZ.build.f_cpu=40000000
-w802.menu.cpu_frq.2MHZ=2MHZ
-w802.menu.cpu_frq.2MHZ.build.f_cpu=2000000
-#---------------------------------------
-# Release /Optimise
-w802.menu.opt.default=Default (-O2 -g3)
-w802.menu.opt.maxspeed=Maximum speed (-O3)
-w802.menu.opt.maxspeed.build.flags.optimize=-O3
-w802.menu.opt.minsize=Minimum code size ( -Os)
-w802.menu.opt.minsize.build.flags.optimize=-Os
-w802.menu.opt.debug=Debug (-g)
+w802.serial.disableDTR=true
+w802.menu.cpu_frq.240MHZ=240 MHz
+w802.menu.cpu_frq.240MHZ.build.f_cpu=240000000L
+w802.menu.cpu_frq.160MHZ=160 MHz
+w802.menu.cpu_frq.160MHZ.build.f_cpu=160000000L
+w802.menu.cpu_frq.120MHZ=120 MHz
+w802.menu.cpu_frq.120MHZ.build.f_cpu=120000000L
+w802.menu.cpu_frq.80MHZ=80 MHz
+w802.menu.cpu_frq.80MHZ.build.f_cpu=80000000L
+w802.menu.cpu_frq.40MHZ=40 MHz
+w802.menu.cpu_frq.40MHZ.build.f_cpu=40000000L
+w802.menu.opt.size=Tamano (-Os)
+w802.menu.opt.size.build.flags.optimize=-Os
+w802.menu.opt.o2=Velocidad (-O2)
+w802.menu.opt.o2.build.flags.optimize=-O2
+w802.menu.opt.o3=Maxima velocidad (-O3)
+w802.menu.opt.o3.build.flags.optimize=-O3
+w802.menu.opt.debug=Depuracion (-Og)
 w802.menu.opt.debug.build.flags.optimize=-Og
+w802.menu.upload_method.serial=Puerto serie (USB)
+w802.menu.upload_method.serial.upload.tool=serial_upload
+w802.menu.upload_method.serial.upload.protocol=serial
+w802.menu.upload_method.cklink=Depurador CK-Link (XuanTie Debugger Server)
+w802.menu.upload_method.cklink.upload.tool=cklink
+w802.menu.upload_method.cklink.upload.protocol=cklink
+w802.menu.upload_method.cklink.upload.require_upload_port=false
+w802.menu.upload_method.cklink.upload.use_1200bps_touch=false
+w802.menu.upload_method.cklink.upload.wait_for_upload_port=false
+w802.menu.upload_speed.2000000=2000000
+w802.menu.upload_speed.2000000.upload.speed=2000000
+w802.menu.upload_speed.1000000=1000000
+w802.menu.upload_speed.1000000.upload.speed=1000000
+w802.menu.upload_speed.921600=921600
+w802.menu.upload_speed.921600.upload.speed=921600
+w802.menu.upload_speed.460800=460800
+w802.menu.upload_speed.460800.upload.speed=460800
+w802.menu.upload_speed.115200=115200
+w802.menu.upload_speed.115200.upload.speed=115200
+w802.menu.erase.no=Solo el programa
+w802.menu.erase.all=Toda la flash (conserva la calibracion de RF)
+w802.menu.erase.all.upload.erase=-eo all
+w802.menu.log.warn=Avisos y errores
+w802.menu.log.warn.build.log_level=2
+w802.menu.log.none=Ninguno
+w802.menu.log.none.build.log_level=0
+w802.menu.log.error=Errores
+w802.menu.log.error.build.log_level=1
+w802.menu.log.info=Informacion
+w802.menu.log.info.build.log_level=3
+w802.menu.log.debug=Depuracion
+w802.menu.log.debug.build.log_level=4
 
-#---------------------------------------
-# Upload Speed
-w802.menu.upload_speed.baud115200=115200
-w802.menu.upload_speed.baud115200.upload.speed=115200
-w802.menu.upload_speed.baud460800=460800
-w802.menu.upload_speed.baud460800.upload.speed=460800
-w802.menu.upload_speed.baud921600=921600
-w802.menu.upload_speed.baud921600.upload.speed=921600
-w802.menu.upload_speed.baud1000000=1000000
-w802.menu.upload_speed.baud1000000.upload.speed=1000000
-w802.menu.upload_speed.baud2000000=2000000
-w802.menu.upload_speed.baud2000000.upload.speed=2000000
-#---------------------------------------
-# Erase Flash
-w802.menu.erase.yes=erase all flash
-w802.menu.erase.yes.erase.flash=all
-w802.menu.erase.no=no erase
-w802.menu.erase.no.erase.flash=none
-##############################################################
-
-##############################################################
-w806.name=W806
-w806.upload.tool=serial_upload
-w806.upload.protocol=xmodem
-w806.upload.maximum_size=1048576
-w806.upload.maximum_data_size=294912
-w806.build.mcu=ck804ef
-w806.build.board=XT804_W806
+######################################################################
+w806.name=W806 (HLK-W806-KIT)
+w806.build.board=W806
 w806.build.core=w806
 w806.build.variant=w806
-w806.build.mcpu=ck804ef
+w806.build.soc=w806
+w806.build.mcu=ck804ef
+w806.upload.maximum_size=1047552
+w806.upload.maximum_data_size=163840
+w806.upload.erase=
 w806.serial.disableRTS=true
-#---------------------------------------
-# Release /Optimise
-w806.menu.opt.default=Default (-O2 -g3)
-#w806.menu.opt.release.build.flags.optimize=-Os -flto
-w806.menu.opt.maxspeed=Maximum speed (-O3)
-w806.menu.opt.maxspeed.build.flags.optimize=-O3
-w806.menu.opt.minsize=Minimum code size ( -Os)
-w806.menu.opt.minsize.build.flags.optimize=-Os
-w806.menu.opt.debug=Debug (-g)
+w806.serial.disableDTR=true
+w806.menu.cpu_frq.240MHZ=240 MHz
+w806.menu.cpu_frq.240MHZ.build.f_cpu=240000000L
+w806.menu.cpu_frq.160MHZ=160 MHz
+w806.menu.cpu_frq.160MHZ.build.f_cpu=160000000L
+w806.menu.cpu_frq.120MHZ=120 MHz
+w806.menu.cpu_frq.120MHZ.build.f_cpu=120000000L
+w806.menu.cpu_frq.80MHZ=80 MHz
+w806.menu.cpu_frq.80MHZ.build.f_cpu=80000000L
+w806.menu.cpu_frq.40MHZ=40 MHz
+w806.menu.cpu_frq.40MHZ.build.f_cpu=40000000L
+w806.menu.opt.size=Tamano (-Os)
+w806.menu.opt.size.build.flags.optimize=-Os
+w806.menu.opt.o2=Velocidad (-O2)
+w806.menu.opt.o2.build.flags.optimize=-O2
+w806.menu.opt.o3=Maxima velocidad (-O3)
+w806.menu.opt.o3.build.flags.optimize=-O3
+w806.menu.opt.debug=Depuracion (-Og)
 w806.menu.opt.debug.build.flags.optimize=-Og
+w806.menu.upload_method.serial=Puerto serie (USB)
+w806.menu.upload_method.serial.upload.tool=serial_upload
+w806.menu.upload_method.serial.upload.protocol=serial
+w806.menu.upload_method.cklink=Depurador CK-Link (XuanTie Debugger Server)
+w806.menu.upload_method.cklink.upload.tool=cklink
+w806.menu.upload_method.cklink.upload.protocol=cklink
+w806.menu.upload_method.cklink.upload.require_upload_port=false
+w806.menu.upload_method.cklink.upload.use_1200bps_touch=false
+w806.menu.upload_method.cklink.upload.wait_for_upload_port=false
+w806.menu.upload_speed.2000000=2000000
+w806.menu.upload_speed.2000000.upload.speed=2000000
+w806.menu.upload_speed.1000000=1000000
+w806.menu.upload_speed.1000000.upload.speed=1000000
+w806.menu.upload_speed.921600=921600
+w806.menu.upload_speed.921600.upload.speed=921600
+w806.menu.upload_speed.460800=460800
+w806.menu.upload_speed.460800.upload.speed=460800
+w806.menu.upload_speed.115200=115200
+w806.menu.upload_speed.115200.upload.speed=115200
+w806.menu.erase.no=Solo el programa
+w806.menu.erase.all=Toda la flash (conserva la calibracion de RF)
+w806.menu.erase.all.upload.erase=-eo all
+w806.menu.log.warn=Avisos y errores
+w806.menu.log.warn.build.log_level=2
+w806.menu.log.none=Ninguno
+w806.menu.log.none.build.log_level=0
+w806.menu.log.error=Errores
+w806.menu.log.error.build.log_level=1
+w806.menu.log.info=Informacion
+w806.menu.log.info.build.log_level=3
+w806.menu.log.debug=Depuracion
+w806.menu.log.debug.build.log_level=4
 
-#---------------------------------------
-# Upload Speed
-w806.menu.upload_speed.baud115200=115200
-w806.menu.upload_speed.baud115200.upload.speed=115200
-w806.menu.upload_speed.baud460800=460800
-w806.menu.upload_speed.baud460800.upload.speed=460800
-w806.menu.upload_speed.baud921600=921600
-w806.menu.upload_speed.baud921600.upload.speed=921600
-w806.menu.upload_speed.baud1000000=1000000
-w806.menu.upload_speed.baud1000000.upload.speed=1000000
-w806.menu.upload_speed.baud2000000=2000000
-w806.menu.upload_speed.baud2000000.upload.speed=2000000
-#---------------------------------------
-# Erase Flash
-w806.menu.erase.yes=erase all flash
-w806.menu.erase.yes.erase.flash=all
-w806.menu.erase.no=no erase
-w806.menu.erase.no.erase.flash=none
-#---------------------------------------
-# CPU Frequency
-w806.menu.cpu_frq.240MHZ=240MHZ
-w806.menu.cpu_frq.240MHZ.build.f_cpu=240000000
-w806.menu.cpu_frq.160MHZ=160MHZ
-w806.menu.cpu_frq.160MHZ.build.f_cpu=160000000
-w806.menu.cpu_frq.80MHZ=80MHZ
-w806.menu.cpu_frq.80MHZ.build.f_cpu=80000000
-w806.menu.cpu_frq.40MHZ=40MHZ
-w806.menu.cpu_frq.40MHZ.build.f_cpu=40000000
-w806.menu.cpu_frq.2MHZ=2MHZ
-w806.menu.cpu_frq.2MHZ.build.f_cpu=2000000
-##############################################################
+######################################################################
+air101.name=Air101
+air101.build.board=AIR101
+air101.build.core=w806
+air101.build.variant=air101
+air101.build.soc=w800
+air101.build.mcu=ck804ef
+air101.upload.maximum_size=1969152
+air101.upload.maximum_data_size=163840
+air101.upload.erase=
+air101.serial.disableRTS=true
+air101.serial.disableDTR=true
+air101.menu.cpu_frq.240MHZ=240 MHz
+air101.menu.cpu_frq.240MHZ.build.f_cpu=240000000L
+air101.menu.cpu_frq.160MHZ=160 MHz
+air101.menu.cpu_frq.160MHZ.build.f_cpu=160000000L
+air101.menu.cpu_frq.120MHZ=120 MHz
+air101.menu.cpu_frq.120MHZ.build.f_cpu=120000000L
+air101.menu.cpu_frq.80MHZ=80 MHz
+air101.menu.cpu_frq.80MHZ.build.f_cpu=80000000L
+air101.menu.cpu_frq.40MHZ=40 MHz
+air101.menu.cpu_frq.40MHZ.build.f_cpu=40000000L
+air101.menu.opt.size=Tamano (-Os)
+air101.menu.opt.size.build.flags.optimize=-Os
+air101.menu.opt.o2=Velocidad (-O2)
+air101.menu.opt.o2.build.flags.optimize=-O2
+air101.menu.opt.o3=Maxima velocidad (-O3)
+air101.menu.opt.o3.build.flags.optimize=-O3
+air101.menu.opt.debug=Depuracion (-Og)
+air101.menu.opt.debug.build.flags.optimize=-Og
+air101.menu.upload_method.serial=Puerto serie (USB)
+air101.menu.upload_method.serial.upload.tool=serial_upload
+air101.menu.upload_method.serial.upload.protocol=serial
+air101.menu.upload_method.cklink=Depurador CK-Link (XuanTie Debugger Server)
+air101.menu.upload_method.cklink.upload.tool=cklink
+air101.menu.upload_method.cklink.upload.protocol=cklink
+air101.menu.upload_method.cklink.upload.require_upload_port=false
+air101.menu.upload_method.cklink.upload.use_1200bps_touch=false
+air101.menu.upload_method.cklink.upload.wait_for_upload_port=false
+air101.menu.upload_speed.2000000=2000000
+air101.menu.upload_speed.2000000.upload.speed=2000000
+air101.menu.upload_speed.1000000=1000000
+air101.menu.upload_speed.1000000.upload.speed=1000000
+air101.menu.upload_speed.921600=921600
+air101.menu.upload_speed.921600.upload.speed=921600
+air101.menu.upload_speed.460800=460800
+air101.menu.upload_speed.460800.upload.speed=460800
+air101.menu.upload_speed.115200=115200
+air101.menu.upload_speed.115200.upload.speed=115200
+air101.menu.erase.no=Solo el programa
+air101.menu.erase.all=Toda la flash (conserva la calibracion de RF)
+air101.menu.erase.all.upload.erase=-eo all
+air101.menu.log.warn=Avisos y errores
+air101.menu.log.warn.build.log_level=2
+air101.menu.log.none=Ninguno
+air101.menu.log.none.build.log_level=0
+air101.menu.log.error=Errores
+air101.menu.log.error.build.log_level=1
+air101.menu.log.info=Informacion
+air101.menu.log.info.build.log_level=3
+air101.menu.log.debug=Depuracion
+air101.menu.log.debug.build.log_level=4
 
-
-##############################################################
+######################################################################
 air103.name=Air103
-air103.upload.tool=serial_upload
-air103.upload.protocol=xmodem
-air103.upload.maximum_size=1048576
-air103.upload.maximum_data_size=294912
-air103.build.mcu=ck804ef
-air103.build.board=XT804_Air103
+air103.build.board=AIR103
 air103.build.core=w806
 air103.build.variant=air103
-air103.build.mcpu=ck804ef
+air103.build.soc=w806
+air103.build.mcu=ck804ef
+air103.upload.maximum_size=1047552
+air103.upload.maximum_data_size=163840
+air103.upload.erase=
 air103.serial.disableRTS=true
-
-#---------------------------------------
-# Release /Optimise
-air103.menu.opt.default=Default (-O2 -g3)
-#air103.menu.opt.release.build.flags.optimize=-Os -flto
-air103.menu.opt.maxspeed=Maximum speed (-O3)
-air103.menu.opt.maxspeed.build.flags.optimize=-O3
-air103.menu.opt.minsize=Minimum code size ( -Os)
-air103.menu.opt.minsize.build.flags.optimize=-Os
-air103.menu.opt.debug=Debug (-g)
+air103.serial.disableDTR=true
+air103.menu.cpu_frq.240MHZ=240 MHz
+air103.menu.cpu_frq.240MHZ.build.f_cpu=240000000L
+air103.menu.cpu_frq.160MHZ=160 MHz
+air103.menu.cpu_frq.160MHZ.build.f_cpu=160000000L
+air103.menu.cpu_frq.120MHZ=120 MHz
+air103.menu.cpu_frq.120MHZ.build.f_cpu=120000000L
+air103.menu.cpu_frq.80MHZ=80 MHz
+air103.menu.cpu_frq.80MHZ.build.f_cpu=80000000L
+air103.menu.cpu_frq.40MHZ=40 MHz
+air103.menu.cpu_frq.40MHZ.build.f_cpu=40000000L
+air103.menu.opt.size=Tamano (-Os)
+air103.menu.opt.size.build.flags.optimize=-Os
+air103.menu.opt.o2=Velocidad (-O2)
+air103.menu.opt.o2.build.flags.optimize=-O2
+air103.menu.opt.o3=Maxima velocidad (-O3)
+air103.menu.opt.o3.build.flags.optimize=-O3
+air103.menu.opt.debug=Depuracion (-Og)
 air103.menu.opt.debug.build.flags.optimize=-Og
+air103.menu.upload_method.serial=Puerto serie (USB)
+air103.menu.upload_method.serial.upload.tool=serial_upload
+air103.menu.upload_method.serial.upload.protocol=serial
+air103.menu.upload_method.cklink=Depurador CK-Link (XuanTie Debugger Server)
+air103.menu.upload_method.cklink.upload.tool=cklink
+air103.menu.upload_method.cklink.upload.protocol=cklink
+air103.menu.upload_method.cklink.upload.require_upload_port=false
+air103.menu.upload_method.cklink.upload.use_1200bps_touch=false
+air103.menu.upload_method.cklink.upload.wait_for_upload_port=false
+air103.menu.upload_speed.2000000=2000000
+air103.menu.upload_speed.2000000.upload.speed=2000000
+air103.menu.upload_speed.1000000=1000000
+air103.menu.upload_speed.1000000.upload.speed=1000000
+air103.menu.upload_speed.921600=921600
+air103.menu.upload_speed.921600.upload.speed=921600
+air103.menu.upload_speed.460800=460800
+air103.menu.upload_speed.460800.upload.speed=460800
+air103.menu.upload_speed.115200=115200
+air103.menu.upload_speed.115200.upload.speed=115200
+air103.menu.erase.no=Solo el programa
+air103.menu.erase.all=Toda la flash (conserva la calibracion de RF)
+air103.menu.erase.all.upload.erase=-eo all
+air103.menu.log.warn=Avisos y errores
+air103.menu.log.warn.build.log_level=2
+air103.menu.log.none=Ninguno
+air103.menu.log.none.build.log_level=0
+air103.menu.log.error=Errores
+air103.menu.log.error.build.log_level=1
+air103.menu.log.info=Informacion
+air103.menu.log.info.build.log_level=3
+air103.menu.log.debug=Depuracion
+air103.menu.log.debug.build.log_level=4
 
-#---------------------------------------
-# Upload Speed
-air103.menu.upload_speed.baud115200=115200
-air103.menu.upload_speed.baud115200.upload.speed=115200
-air103.menu.upload_speed.baud460800=460800
-air103.menu.upload_speed.baud460800.upload.speed=460800
-air103.menu.upload_speed.baud921600=921600
-air103.menu.upload_speed.baud921600.upload.speed=921600
-air103.menu.upload_speed.baud1000000=1000000
-air103.menu.upload_speed.baud1000000.upload.speed=1000000
-air103.menu.upload_speed.baud2000000=2000000
-air103.menu.upload_speed.baud2000000.upload.speed=2000000
-#---------------------------------------
-# Erase Flash
-air103.menu.erase.yes=erase all flash
-air103.menu.erase.yes.erase.flash=all
-air103.menu.erase.no=no erase
-air103.menu.erase.no.erase.flash=none
-#---------------------------------------
-# CPU Frequency
-air103.menu.cpu_frq.240MHZ=240MHZ
-air103.menu.cpu_frq.240MHZ.build.f_cpu=240000000
-air103.menu.cpu_frq.160MHZ=160MHZ
-air103.menu.cpu_frq.160MHZ.build.f_cpu=160000000
-air103.menu.cpu_frq.80MHZ=80MHZ
-air103.menu.cpu_frq.80MHZ.build.f_cpu=80000000
-air103.menu.cpu_frq.40MHZ=40MHZ
-air103.menu.cpu_frq.40MHZ.build.f_cpu=40000000
-air103.menu.cpu_frq.2MHZ=2MHZ
-air103.menu.cpu_frq.2MHZ.build.f_cpu=2000000

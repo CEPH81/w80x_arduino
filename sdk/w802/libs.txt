@@ -1,0 +1,1 @@
+-lcsi_math -lcsi_dsp2_nn -lwpas -lwpa_supplicant -lmacsw -lwm_wifi -lrf -lwm_nvs -lwm_netif_mgr -lwm_net_manager -lwm_event -lmbedtls -llwip

@@ -1,0 +1,5 @@
+max=0x1E0C00
+header=0x800F000
+run=0x800f400
+ver=2.4-rc
+flags=0x3

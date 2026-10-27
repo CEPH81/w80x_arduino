@@ -1,0 +1,1 @@
+-lxt804 -lwm_system -lwm_soc -lwm_log -lwm_heap -lwm_hal -lwm_ft_param -lwm_dt -lwm_debug -lwm_common -lpartition_table -lfreertos -ldriver
