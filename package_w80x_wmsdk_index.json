@@ -1,0 +1,102 @@
+{
+  "packages": [
+    {
+      "name": "w80x_wmsdk",
+      "maintainer": "CEPH81 (basado en w80x_arduino de board707 y WM IoT SDK de WinnerMicro)",
+      "websiteURL": "https://github.com/CEPH81/w80x_arduino/tree/wm-iot-sdk",
+      "email": "",
+      "help": {
+        "online": "https://github.com/CEPH81/w80x_arduino/tree/wm-iot-sdk"
+      },
+      "platforms": [
+        {
+          "name": "W80x (WM IoT SDK)",
+          "architecture": "w80x",
+          "version": "0.9.0",
+          "category": "Contributed",
+          "url": "https://raw.githubusercontent.com/CEPH81/w80x_arduino/paquetes/w80x_wmsdk-0.9.0.tar.bz2",
+          "archiveFileName": "w80x_wmsdk-0.9.0.tar.bz2",
+          "checksum": "SHA-256:2b801079b619330ebee7bde06ceea0cbb13e80e8442ceec1c8d301a89b8828b8",
+          "size": "11823738",
+          "help": {
+            "online": "https://github.com/CEPH81/w80x_arduino/tree/wm-iot-sdk"
+          },
+          "boards": [
+            {
+              "name": "W800 (HLK-W800-KIT)"
+            },
+            {
+              "name": "W801 (HLK-W801-KIT)"
+            },
+            {
+              "name": "W802"
+            },
+            {
+              "name": "W806 (HLK-W806-KIT)"
+            },
+            {
+              "name": "Air101"
+            },
+            {
+              "name": "Air103"
+            }
+          ],
+          "toolsDependencies": [
+            {
+              "packager": "w80x_wmsdk",
+              "name": "csky",
+              "version": "2021.04.23-slim"
+            },
+            {
+              "packager": "w80x_wmsdk",
+              "name": "w80x_tool",
+              "version": "v1.0"
+            }
+          ]
+        }
+      ],
+      "tools": [
+        {
+          "name": "csky",
+          "version": "2021.04.23-slim",
+          "systems": [
+            {
+              "host": "i686-mingw32",
+              "url": "https://raw.githubusercontent.com/CEPH81/w80x_arduino/paquetes/csky-elfabiv2-minilibc-20210423-windows.tar.bz2",
+              "archiveFileName": "csky-elfabiv2-minilibc-20210423-windows.tar.bz2",
+              "checksum": "SHA-256:97467def95c748f85d10d54cb08a1fe296a9fa003d9e9eedc019e121d255ec07",
+              "size": "33400023"
+            },
+            {
+              "host": "x86_64-pc-linux-gnu",
+              "url": "https://raw.githubusercontent.com/CEPH81/w80x_arduino/paquetes/csky-elfabiv2-minilibc-20210423-linux-x86_64.tar.bz2",
+              "archiveFileName": "csky-elfabiv2-minilibc-20210423-linux-x86_64.tar.bz2",
+              "checksum": "SHA-256:87516b16a04d725f3baeb9a0d6e5eb6f5501896c66035f76f52ff3644fe931b6",
+              "size": "35128367"
+            }
+          ]
+        },
+        {
+          "name": "w80x_tool",
+          "version": "v1.0",
+          "systems": [
+            {
+              "host": "i686-mingw32",
+              "url": "https://github.com/Hi-LinkDuino/w80x_arduino/releases/download/v0.0.1/w80x_tool-mingw32-v1.0.zip",
+              "archiveFileName": "w80x_tool-mingw32-v1.0.zip",
+              "checksum": "SHA-256:9f134e107f1b075fd4394c8f8cccf11146ef42d25d1c058d0fea9b14d2f6f5aa",
+              "size": "3278269"
+            },
+            {
+              "host": "x86_64-pc-linux-gnu",
+              "url": "https://github.com/board707/w80x_arduino/releases/download/v0.0.2a/w80x_tool_x86_64-pc-linux-gnu-v1.0.tar.gz",
+              "archiveFileName": "w80x_tool_x86_64-pc-linux-gnu-v1.0.tar.gz",
+              "checksum": "SHA-256:1d0bd6f499b11877c66ebe36f848e7b540f5816134ddad02d2e8d233ad7b061b",
+              "size": "154302"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

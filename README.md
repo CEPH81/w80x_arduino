@@ -1,127 +1,90 @@
-![](doc/rect7811.png)
-# w80x_duino
-Arduino package for [WinnerMicro](http://www.winnermicro.com/) boards, based on XT-E804 MCU.
+# W80x (WM IoT SDK) para Arduino IDE 2.x
 
-This is a port of the WinnerMicro W806 SDK to the Arduino world. It uses T-HEAD C-SKY Tools V3.10.29 Minilibc abiv2 toolchain (GCC v6.3.0)
+Núcleo Arduino para los microcontroladores **WinnerMicro W80x** (CPU XT804 a 240 MHz),
+construido sobre el SDK oficial **WM IoT SDK v2.4** (FreeRTOS) de WinnerMicro.
+Es un *fork* de [w80x_arduino de board707](https://github.com/board707/w80x_arduino):
+se mantienen las mismas placas y la misma estructura (`boards.txt`, `platform.txt`,
+`cores/w806`, `variants/*`, `libraries`), pero el núcleo está reescrito sobre los
+drivers del SDK nuevo.
 
-## Boards
+> **Estado: versión de prueba 0.9.0 (fase 1).** Funcionan GPIO, `Serial`…`Serial5`,
+> `millis`/`micros`/`delay`, ADC, PWM, interrupciones y tareas de FreeRTOS.
+> Las librerías (Wire, SPI, EEPROM, temporizadores) y el WiFi llegan en las fases 2 y 3.
 
-- W800
-- W801 ([pinout](doc/W801_pinout.png)) 
-- W802
-- W806 ([pinout](doc/W806_pinout.png)) 
-- Air_101 (W800 clone) ([pinout](doc/Air101_pinout.JPG)) 
-- Air_103 (W806 clone) ([pinout](doc/Air103_pinout.png)) 
+| Placa | Chip | Flash para el programa | WiFi/BLE |
+|---|---|---|---|
+| W800 (HLK-W800-KIT) | W800 | 1,9 MB | sí (fase 3) |
+| W801 (HLK-W801-KIT) | W801S | 1,9 MB | sí (fase 3) |
+| W802 | W802 | 1,9 MB | sí (fase 3) |
+| W806 (HLK-W806-KIT) | W806 | 1 MB | no |
+| Air101 | W800 | 1,9 MB | sí (fase 3) |
+| Air103 | W806 | 1 MB | no |
 
-## Package development - what works and what not
+## Instalación (Gestor de placas)
 
-The ticked options have been implemented and tested, the unticked ones are under development, and more developers are expected to maintain together
+1. **Archivo → Preferencias → URLs adicionales del gestor de placas**:
+   ```
+   https://raw.githubusercontent.com/CEPH81/w80x_arduino/wm-iot-sdk/package_w80x_wmsdk_index.json
+   ```
+2. **Herramientas → Placa → Gestor de placas**, busque **W80x (WM IoT SDK)** e instale.
+   Se descargan también el compilador C-SKY y `wm_tool` (los mismos del paquete de board707).
 
-- [x] Arduino IDE package tools for Windows and Linux 
-- [x] GPIO
-- [x] [HardwareSerial](cores/w806/HardwareSerial.md) class
-- [x] ADC
-- [x] [PWM](doc/PWM.md)
-- [x] [HardwareTimer](libraries/HardwareTimer/Readme.md) lib
-- [x] I2C - HardwareI2c, SoftwareI2c
-- [x] [SPI](doc/SPI.md)
-- [x] [EEPROM](libraries/EEPROM/Readme.md) library
-- [x] Stream, Print and String classes
-- [x] I2S interface (see libraries/I2S/examples/Wav_SD_Player example)
-- [x] SDIO -> SPI interface
-- [x] [DMA](doc/W_DMA.md)
+Puede convivir con el paquete `w80x_duino` de board707: son paquetes distintos.
+Compilador disponible para **Windows y Linux** (x86-64).
 
-To detailed development info see the [CHANGES.txt](CHANGES.txt) file.
+## Menús de la placa
 
-## Library Compatibility List
-The libraries listed below tested to be used with w80x controllers:
+- **Frecuencia de CPU**: 240 (por defecto), 160, 120, 80 o 40 MHz.
+- **Optimización**: tamaño (`-Os`), velocidad (`-O2`/`-O3`) o depuración (`-Og`).
+- **Método de carga**:
+  - *Puerto serie (USB)*: `wm_tool` reinicia el chip por RTS y graba el `.fls`
+    (bootloader + programa + tabla de particiones). No toca la calibración de RF ni NVS.
+  - *Depurador CK-Link*: graba por JTAG con **XuanTie (T-Head) Debugger Server**
+    (ver más abajo). No necesita puerto.
+- **Velocidad de carga**: 2 M (por defecto) a 115200 baudios. Si falla, baje la velocidad.
+- **Borrar flash**: solo el programa, o toda la flash (se conserva la calibración de RF).
+- **Mensajes del SDK**: nivel de los mensajes del sistema por `Serial` (por defecto, solo avisos y errores).
 
-* **AdafruitGFX** and its companion libraries
-* **SD.h** and other related libraries - SdFat.h, SdFile.h etc 
-* **LiquidCrytal** screen library
-* Basic support of **LVGL** library using ILI9341_Fast_SPI driver (see [#27](https://github.com/board707/w80x_arduino/discussions/27))
+> La primera carga en una placa que tenía firmware del núcleo anterior (o de fábrica)
+> debe hacerse por **puerto serie**: el SDK nuevo usa otro bootloader y otra tabla de particiones.
 
-## Ported Libraries
-Below are links to w80x-ported versions of some arduino libraries:
+### Carga con CK-Link
 
- * [FastLED](https://github.com/board707/FastLED) - the library for controlling an addressable LEDs
- * [MCUFRIEND_kbv](https://github.com/board707/MCUFRIEND_kbv) - the library for 8bits parallel TFT displays
+1. Instale **XuanTie Debugger Server** (T-Head DebugServer) de la web de XuanTie/OCC.
+   Trae los algoritmos de flash de WinnerMicro (`…W800…FLASH…elf`, `…W806…FLASH…elf`).
+2. Conexión: **TCK ↔ PA1**, **TMS ↔ PA4**, **GND ↔ GND**, y opcionalmente **TRST ↔ RST** y 3V3.
+3. En **Método de carga** elija *Depurador CK-Link* y pulse **Subir**.
 
-## Installation in Arduino IDE
+El programa `wm_img` busca `DebugServerConsole` en el PATH y en las carpetas de
+instalación habituales; si lo tiene en otra, ponga esa carpeta en la variable de
+entorno `XUANTIE_DEBUGSERVER`. Se graba la flash desde `0x08002000` (bootloader,
+tabla de particiones y programa) y el chip se reinicia.
 
-1. **File -> Preferences**
+## Diferencias con el núcleo anterior (board707)
 
-2. Enter the following URL in the additional development board manager URL:
+- El programa corre en una tarea de FreeRTOS (`loopTask`, 8 KB de pila). Se pueden crear
+  tareas con `xTaskCreate()`, colas, semáforos… `delay()` cede la CPU a otras tareas.
+- `analogRead()` devuelve un valor de **12 bits** (0…4095, cambiable con
+  `analogReadResolution()`); `analogReadMilliVolts()` devuelve milivoltios (antes
+  `analogRead()` devolvía milivoltios). Entrada de 0 a 2,4 V.
+- `analogWrite(pata, 0…255)`: PWM de 8 bits, 1 kHz por defecto (`analogWriteFrequency()`).
+  Las patas que comparten canal llevan la misma señal (ver `variants/<placa>/pins_arduino.h`).
+- `attachInterrupt(pata, función, RISING | FALLING | CHANGE | ONLOW | ONHIGH)`.
+- `Serial.printf()`, `Serial1`…`Serial5` con las patas por defecto del SDK (ver
+  `pins_arduino.h` de cada placa), `temperatureRead()`, `getFreeHeap()`, `random()` por hardware.
 
-> https://raw.githubusercontent.com/board707/w80x_arduino/hal-v0.6.0/package_w80x_index.json
+## Para desarrolladores
 
-  In case of `Error: 13 INTERNAL: can not install w80x_duino:csky@2021.04.23 tool` use an alternative:
+- `tools/sdk_builder/build_sdk.py`: compila WM IoT SDK para cada chip y deja en `sdk/`
+  las librerías, cabeceras, configuración, script de enlace, bootloader y tabla de particiones.
+- `tools/sdk_builder/gen_variants.py`: genera el árbol de dispositivos (`wm_dt_hw.c`),
+  `pins_mux.h` y `pins_arduino.h` de cada placa.
+- `tools/sdk_builder/gen_boards.py`: genera `boards.txt`.
+- `tools/wm_img`: herramienta en Go que crea `.img`, `.fls` y la imagen para CK-Link
+  (sin Python) y lanza la carga por CK-Link.
+- `tools/paquete.py`: crea el paquete y el índice del Gestor de placas.
 
-> https://raw.githubusercontent.com/board707/w80x_arduino/hal-v0.6.0/package_w80x_test_index.json
+## Licencias
 
-  If this doesn't work, try any of these link addresses:
-
-> http://dl.isme.fun/w80x_arduino/package_w80x_index.json
-
-> https://raw.githubusercontent.com/board707/w80x_arduino/hal-v0.6.0/package_w80x_isme_proxy_index.json
-
-![](doc/arduino_preferences.png)
-
-3. **Tools -> Boards -> Boards Manager...**
-Search for **w80x_duino**, select the latest version to install 
-
-![board_manager](doc/board_manager.png)
-
-4. **Tools -> Boards**
-
-![](doc/board_select.png)
-
-**Notes to Linux users**
-
-If you experienced the error at the first build under linux:
-
-`/w80x_duino/tools/w80x_tool/v1.0/lin/wm_tool: /lib64/libc.so.6: version GLIBC_2.34 not found `
-
-or something like it, just go to your `w80x_duino/tools/w80x_tool/v1.0/lin/` folder and remove the `wm_tool` and `wm_toold` files.
-After that start building again and now the error should gone.
-
-### Support
-If you have any problems using the package, please submit an issue directly. Developers are welcome to collaborate and develop and submit commits. This project will continue to be updated.
-
-## W806 MCU Info
-
- - QFN56 package, 6mm x 6mm, pitch 0.35mm
-
-**Main Features**
-
-- Integrated 32-bit XT804 processor, operating frequency 240MHz, built-in DSP, floating point unit and security engine
-- Builtin 1MB Flash(2MB for W801)，288KB RAM
-- Integrated PSRAM interface, supports up to 64MB external PSRAM memory
-- 6x high-speed UARTs
-- 4-port 16-bit ADC，max sample rate 1KHz
-- 1 high-speed SPI（slave mode），up to 50MHz
-- 1 SPI (master - slave mode)
-- 1 SDIO_HOST，supports SDIO2.0、SDHC、MMC4.2
-- 1 SDIO_DEVICE，supports SDIO2.0，up to 200Mbps
-- 1 Hardware I2C 
-- up to 44 GPIOs
-- 5-channels PWM
-- 1 Duplex I2S interface
-- LCD interface，supports 4x32 device
-- 1 7816 interface
-- 15 Touch Sensor
-
-**Power options**
-
-- 3.3V single supply
-- Sleep, standy and shutdown power modes
-- Standby power consumption is less than 10uA
-
-
-## Credits
-- Hi-Link developed and produced this development board
-- This open source project is maintained on base of the nulllab team project [nulllab team](https://github.com/nulllaborg)
-
-
-Original [README](README_ch.md) (chinesse)
-
+Núcleo: LGPL 2.1 (como Arduino y board707). WM IoT SDK: Apache 2.0 (`sdk/LICENSE-WM_IoT_SDK`).
+La documentación original de board707 está en `README_board707.md`.

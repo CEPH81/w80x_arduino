@@ -4,7 +4,7 @@
 # Especificacion: https://arduino.github.io/arduino-cli/latest/platform-specification/
 
 name=W80x (WM IoT SDK)
-version=1.0.0
+version=0.9.0
 
 # ------------------------------------------------------------------ rutas
 sdk.path={runtime.platform.path}/sdk
@@ -35,7 +35,7 @@ build.log_level=2
 
 compiler.cpu_flags=-mcpu=ck804ef -mhard-float
 compiler.common_flags={compiler.cpu_flags} {build.flags.optimize} -g -ffunction-sections -fdata-sections -fno-builtin-printf -fno-builtin-fprintf
-compiler.defines=-DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} -DARDUINO_ARCH_W80X -DW80X_CHIP_{build.soc} -DW80X_LOG_LEVEL={build.log_level} "-DMBEDTLS_CONFIG_FILE=\"wm_mbedtls_config.h\"" {build.extra_flags}
+compiler.defines=-DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DARDUINO_ARCH_{build.arch} -DW80X_CHIP_{build.soc} -DW80X_LOG_LEVEL={build.log_level} "-DMBEDTLS_CONFIG_FILE=\"wm_mbedtls_config.h\"" {build.extra_flags}
 compiler.sdk.includes="-iprefix{sdk.path}/include/" "@{sdk.chip.path}/includes.txt" "-I{sdk.chip.path}/config" "-I{sdk.chip.path}/device_table"
 
 compiler.c.flags=-c {compiler.common_flags} -std=gnu99 {compiler.warning_flags} -MMD
