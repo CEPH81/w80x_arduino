@@ -154,3 +154,70 @@ char * dtostrf(double number, signed char width, unsigned char prec, char *s) {
 
 
  
+
+/* ---- funciones de cadenas que faltan en minilibc ---- */
+__attribute__((weak)) char *strndup(const char *s, size_t n)
+{
+    size_t l = 0;
+    while (l < n && s[l]) l++;
+    char *d = (char *)malloc(l + 1);
+    if (d) {
+        memcpy(d, s, l);
+        d[l] = 0;
+    }
+    return d;
+}
+
+__attribute__((weak)) size_t strlcat(char *dest, const char *src, size_t len)
+{
+    size_t dl = 0, sl = strlen(src);
+    while (dl < len && dest[dl]) dl++;
+    if (dl == len) return len + sl;
+    size_t c = sl < len - dl - 1 ? sl : len - dl - 1;
+    memcpy(dest + dl, src, c);
+    dest[dl + c] = 0;
+    return dl + sl;
+}
+
+__attribute__((weak)) char *strtok_r(char *str, const char *delim, char **saveptr)
+{
+    char *s = str ? str : *saveptr;
+    if (!s) return NULL;
+    s += strspn(s, delim);
+    if (!*s) {
+        *saveptr = NULL;
+        return NULL;
+    }
+    char *e = s + strcspn(s, delim);
+    if (*e) {
+        *e++ = 0;
+        *saveptr = e;
+    } else {
+        *saveptr = NULL;
+    }
+    return s;
+}
+
+__attribute__((weak)) char *strsep(char **stringp, const char *delim)
+{
+    char *s = *stringp;
+    if (!s) return NULL;
+    char *e = s + strcspn(s, delim);
+    if (*e) {
+        *e++ = 0;
+        *stringp = e;
+    } else {
+        *stringp = NULL;
+    }
+    return s;
+}
+
+__attribute__((weak)) void *memmem(const void *haystack, size_t hlen, const void *needle, size_t nlen)
+{
+    const unsigned char *h = (const unsigned char *)haystack;
+    if (nlen == 0) return (void *)h;
+    for (size_t i = 0; i + nlen <= hlen; i++) {
+        if (h[i] == *(const unsigned char *)needle && memcmp(h + i, needle, nlen) == 0) return (void *)(h + i);
+    }
+    return NULL;
+}

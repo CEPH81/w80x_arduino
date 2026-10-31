@@ -28,7 +28,7 @@ FECHA = 1767225600  # 2026-01-01
 
 # lo que va en el paquete (rutas relativas a la raiz)
 INCLUIR = ['boards.txt', 'platform.txt', 'LICENSE', 'README.md', 'cores', 'variants', 'sdk',
-           'tools/wm_img/bin']  # libraries: fase 2
+           'libraries', 'tools/wm_img/bin']
 EXCLUIR = re.compile(r'(^|/)(platform\.local\.txt|\.git[^/]*|__pycache__|[^/]*\.(o|d|pyc))(/|$)')
 
 # compilador C-SKY V3.10.29 minilibc (20210423), el mismo de board707, reempaquetado

@@ -7,17 +7,18 @@ se mantienen las mismas placas y la misma estructura (`boards.txt`, `platform.tx
 `cores/w806`, `variants/*`, `libraries`), pero el núcleo está reescrito sobre los
 drivers del SDK nuevo.
 
-> **Estado: versión de prueba 0.9.0 (fase 1).** Funcionan GPIO, `Serial`…`Serial5`,
-> `millis`/`micros`/`delay`, ADC, PWM, interrupciones y tareas de FreeRTOS.
-> Las librerías (Wire, SPI, EEPROM, temporizadores) y el WiFi llegan en las fases 2 y 3.
+> **Estado: versión de prueba 0.9.1.** Núcleo (GPIO, `Serial`…`Serial5`, tiempos, ADC, PWM,
+> interrupciones, FreeRTOS), librerías Wire, SPI, EEPROM, Preferences y HardwareTimer, y **WiFi**
+> (estación, punto de acceso, búsqueda de redes, TCP, UDP, MQTT). Todo compila para las 6 placas;
+> falta probarlo en hardware.
 
 | Placa | Chip | Flash para el programa | WiFi/BLE |
 |---|---|---|---|
-| W800 (HLK-W800-KIT) | W800 | 1,9 MB | sí (fase 3) |
-| W801 (HLK-W801-KIT) | W801S | 1,9 MB | sí (fase 3) |
-| W802 | W802 | 1,9 MB | sí (fase 3) |
+| W800 (HLK-W800-KIT) | W800 | 1,9 MB | sí |
+| W801 (HLK-W801-KIT) | W801S | 1,9 MB | sí |
+| W802 | W802 | 1,9 MB | sí |
 | W806 (HLK-W806-KIT) | W806 | 1 MB | no |
-| Air101 | W800 | 1,9 MB | sí (fase 3) |
+| Air101 | W800 | 1,9 MB | sí |
 | Air103 | W806 | 1 MB | no |
 
 ## Instalación (Gestor de placas)
@@ -60,6 +61,39 @@ instalación habituales; si lo tiene en otra, ponga esa carpeta en la variable d
 entorno `XUANTIE_DEBUGSERVER`. Se graba la flash desde `0x08002000` (bootloader,
 tabla de particiones y programa) y el chip se reinicia.
 
+## Librerías incluidas
+
+| Librería | Qué hace | Ejemplos |
+|---|---|---|
+| **Wire** | I²C maestro hasta 400 kHz; `Wire.begin(sda, scl)` para otras patas; códigos de error de `endTransmission()` (2 = sin respuesta, 5 = bus bloqueado) | `i2c_scanner` |
+| **SPI** | SPI maestro hasta 20 MHz, `SPISettings`, modos 0–3, MSB/LSB primero | `SPI_loopback` |
+| **EEPROM** | EEPROM emulada en la flash (NVS), 2 KB por defecto (hasta 8 KB); se guarda al momento | `EEPROM_basico` |
+| **Preferences** | ajustes con nombre, como en el ESP32 (`putInt`, `getString`…) | `Contador` |
+| **HardwareTimer** | 6 temporizadores en µs o ms con interrupción (misma interfaz que antes) | `Tim_Led_Irq` |
+| **WiFi** | `WiFi.begin`, `softAP`, `scanNetworks`, `WiFiClient`, `WiFiServer`, `WiFiUDP` (interfaz del ESP32). Solo W800, W801, W802 y Air101 | `WiFiScan`, `WiFiClientBasic`, `WiFiWebServer`, `WiFiAccessPoint`, `WiFiUDPNtp`, `MQTT_PubSubClient` |
+| LiquidCrystal, SD, GyverOLED | las de board707, sin cambios (salvo detectar la placa) | las suyas |
+
+Las patas por defecto de cada puerto están al principio de `variants/<placa>/pins_arduino.h`.
+
+### WiFi en breve
+
+```cpp
+#include <WiFi.h>
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.begin("MiRed", "MiClave");          // reconecta solo si se cae
+  while (WiFi.status() != WL_CONNECTED) delay(500);
+  Serial.println(WiFi.localIP());
+}
+```
+
+- IP fija: `WiFi.config(IPAddress(192,168,1,50), IPAddress(192,168,1,1), IPAddress(255,255,255,0))` antes o después de `begin`.
+- Punto de acceso: `WiFi.softAP("Nombre", "clave8+")`; la placa queda en **192.168.10.1** y reparte direcciones por DHCP.
+  El canal lo elige el SDK (el de la red a la que esté conectada, o el 1).
+- MQTT: instale **PubSubClient** desde el Gestor de librerías y vea el ejemplo `MQTT_PubSubClient`.
+- Un programa con WiFi ocupa unos 560 KB (cabe de sobra en los 1,9 MB).
+
 ## Diferencias con el núcleo anterior (board707)
 
 - El programa corre en una tarea de FreeRTOS (`loopTask`, 8 KB de pila). Se pueden crear
@@ -71,7 +105,13 @@ tabla de particiones y programa) y el chip se reinicia.
   Las patas que comparten canal llevan la misma señal (ver `variants/<placa>/pins_arduino.h`).
 - `attachInterrupt(pata, función, RISING | FALLING | CHANGE | ONLOW | ONHIGH)`.
 - `Serial.printf()`, `Serial1`…`Serial5` con las patas por defecto del SDK (ver
-  `pins_arduino.h` de cada placa), `temperatureRead()`, `getFreeHeap()`, `random()` por hardware.
+  `pins_arduino.h` de cada placa) o con otras: `Serial2.begin(9600, SERIAL_8N1, rx, tx)`.
+- `temperatureRead()`, `getFreeHeap()`, `random()` por hardware.
+- `EEPROM` ya no necesita crear un objeto: use `EEPROM.read(0)` (se puede seguir creando
+  `EEPROMClass mi_eeprom(tamaño)` como antes).
+- Se quitaron las librerías y ejemplos que dependían del HAL anterior (HAL_Examples, I2S,
+  ILI9341_Fast_SDIO_SPI, prueba de LVGL y PSRAM).
+- W802: la placa no tiene LED de usuario; `LED_BUILTIN` es la luz del conector TFT (PB8).
 
 ## Para desarrolladores
 

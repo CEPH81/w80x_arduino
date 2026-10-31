@@ -23,6 +23,7 @@
 #include "WString.h"
 #include "Stream.h"
 #include "HardwareSerial.h"
+#include "IPAddress.h"
 #endif
 
 #include "pgmspace.h"

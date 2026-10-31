@@ -25,6 +25,22 @@ typedef uint8_t byte;
 typedef bool boolean;
 typedef uint16_t word;
 
+/* ---------- funciones de cadenas que no trae la libreria C (minilibc) ----------
+   strdup, strnlen, strcasecmp, strncasecmp, strcasestr, strlcpy y memrchr las da el
+   SDK (wm_utils); strndup, strlcat, strtok_r, strsep y memmem, el nucleo. */
+char *strdup(const char *s);
+char *strndup(const char *s, size_t n);
+size_t strnlen(const char *s, size_t maxlen);
+int strcasecmp(const char *s1, const char *s2);
+int strncasecmp(const char *s1, const char *s2, size_t n);
+char *strcasestr(const char *str1, const char *str2);
+size_t strlcpy(char *dest, const char *src, size_t len);
+size_t strlcat(char *dest, const char *src, size_t len);
+char *strtok_r(char *str, const char *delim, char **saveptr);
+char *strsep(char **stringp, const char *delim);
+void *memmem(const void *haystack, size_t hlen, const void *needle, size_t nlen);
+void *memrchr(const void *s, int c, size_t n);
+
 /* ---------- niveles y modos de las patas ---------- */
 #define HIGH 0x1
 #define LOW  0x0

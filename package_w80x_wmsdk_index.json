@@ -12,12 +12,12 @@
         {
           "name": "W80x (WM IoT SDK)",
           "architecture": "w80x",
-          "version": "0.9.0",
+          "version": "0.9.1",
           "category": "Contributed",
-          "url": "https://raw.githubusercontent.com/CEPH81/w80x_arduino/paquetes/w80x_wmsdk-0.9.0.tar.bz2",
-          "archiveFileName": "w80x_wmsdk-0.9.0.tar.bz2",
-          "checksum": "SHA-256:2b801079b619330ebee7bde06ceea0cbb13e80e8442ceec1c8d301a89b8828b8",
-          "size": "11823738",
+          "url": "https://raw.githubusercontent.com/CEPH81/w80x_arduino/paquetes/w80x_wmsdk-0.9.1.tar.bz2",
+          "archiveFileName": "w80x_wmsdk-0.9.1.tar.bz2",
+          "checksum": "SHA-256:f8fbc8d4f67044b942ac9757ab1c4dedecd95fb9124f7c67cd675f1756af7921",
+          "size": "13182596",
           "help": {
             "online": "https://github.com/CEPH81/w80x_arduino/tree/wm-iot-sdk"
           },
