@@ -4,7 +4,7 @@
 # Especificacion: https://arduino.github.io/arduino-cli/latest/platform-specification/
 
 name=W80x (WM IoT SDK)
-version=0.9.1
+version=0.9.2
 
 # ------------------------------------------------------------------ rutas
 sdk.path={runtime.platform.path}/sdk

@@ -17,7 +17,12 @@ void setup() {
 void loop() {
   WiFiClient c = server.available();
   if (c) {
-    c.readStringUntil('\n');
+    // leer la peticion completa (hasta la linea vacia)
+    unsigned long t0 = millis();
+    while (c.connected() && millis() - t0 < 2000) {
+      String l = c.readStringUntil('\n');
+      if (l.length() <= 1) break;
+    }
     c.print("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nConnection: close\r\n\r\nHola desde el W80x\r\n");
     c.stop();
   }

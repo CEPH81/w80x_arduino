@@ -11,15 +11,36 @@ extern "C" {
 #include "lwip/errno.h"
 }
 
+/* lwIP envia RST (y el navegador descarta la respuesta) si se cierra un socket
+   con datos recibidos sin leer: se leen y se descartan antes de cerrar */
+static void graceful_close(int fd)
+{
+    if (fd < 0) {
+        return;
+    }
+    ::lwip_shutdown(fd, SHUT_WR); /* FIN: lo enviado se entrega */
+    uint8_t buf[64];
+    uint32_t t0 = millis();
+    while (millis() - t0 < 100) {
+        int r = ::lwip_recv(fd, buf, sizeof(buf), MSG_DONTWAIT);
+        if (r > 0) {
+            continue;
+        }
+        if (r == 0 || (errno != EAGAIN && errno != EWOULDBLOCK)) {
+            break; /* el otro extremo tambien cerro */
+        }
+        delay(2);
+    }
+    ::lwip_close(fd);
+}
+
 class WiFiClientSocket
 {
 public:
     explicit WiFiClientSocket(int f) : fd(f), refs(1), peeked(-1), closed(false) {}
     ~WiFiClientSocket()
     {
-        if (fd >= 0) {
-            ::lwip_close(fd);
-        }
+        graceful_close(fd);
     }
     int fd;
     int refs;
@@ -260,7 +281,7 @@ void WiFiClient::stop()
     if (_sock) {
         /* se cierra para todas las copias */
         if (_sock->fd >= 0) {
-            ::lwip_close(_sock->fd);
+            graceful_close(_sock->fd);
             _sock->fd = -1;
         }
         _sock->closed = true;

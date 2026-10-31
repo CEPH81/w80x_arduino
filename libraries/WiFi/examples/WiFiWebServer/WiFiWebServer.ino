@@ -19,7 +19,11 @@ void loop() {
   WiFiClient c = server.available();
   if (!c) return;
   String linea = c.readStringUntil('\n');   // "GET /on HTTP/1.1"
-  while (c.available()) c.read();           // resto de la peticion
+  unsigned long t0 = millis();              // resto de la peticion (hasta la linea vacia)
+  while (c.connected() && millis() - t0 < 2000) {
+    String l = c.readStringUntil('\n');
+    if (l.length() <= 1) break;
+  }
   if (linea.indexOf("GET /on") >= 0) digitalWrite(LED_BUILTIN, LOW);
   if (linea.indexOf("GET /off") >= 0) digitalWrite(LED_BUILTIN, HIGH);
   c.print("HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=utf-8\r\nConnection: close\r\n\r\n");
