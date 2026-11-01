@@ -1,0 +1,10 @@
+# Tabla de particiones para los chips con 1 MB de flash (W806, Air103).
+# La "normal" del SDK supone 2 MB (app hasta 0x10F000 y NVS en 0x1F0000) y en
+# un W806 da "partition app exceeds flash size" y "read pt nvs fail" (sin NVS:
+# EEPROM, Preferences y calibracion del ADC no funcionan).
+# name,          offset,    size,      flag
+ft,              0x0,       0x2000,    0x0
+bootloader,      0x2000,    0xC000,    0x0
+partition_table, 0xE000,    0x1000,    0x0
+app,             0xF000,    0xE9000,   0x0
+nvs,             0xF8000,   0x8000,    0x0

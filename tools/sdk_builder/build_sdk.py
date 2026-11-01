@@ -19,6 +19,9 @@ OUT = os.path.join(PLAT, 'sdk')
 SDK = os.environ.get('WM_IOT_SDK_PATH') or sys.exit('defina WM_IOT_SDK_PATH')
 WORK = os.environ.get('SDK_BUILD_DIR', '/tmp/w80x_sdk_build')
 
+# chips con 1 MB de flash: tabla de particiones propia (la del SDK supone 2 MB)
+FLASH_1M = {'w806', 'w805'}
+
 # chips con radio (WiFi/BLE)
 RADIO = {'w800', 'w801s', 'w802', 'w803'}
 SOCS = sys.argv[1:] or ['w800', 'w801s', 'w802', 'w806']
@@ -44,6 +47,9 @@ def build(soc):
     cfg = open(os.path.join(HERE, 'prj_common.config')).read()
     if soc in RADIO:
         cfg += open(os.path.join(HERE, 'prj_wifi.config')).read()
+    if soc in FLASH_1M:
+        cfg += '\nCONFIG_WM_PARTITION_TABLE_CUSTOMIZATION=y\n'
+        shutil.copy(os.path.join(HERE, 'partition_table_1M.csv'), os.path.join(proj, 'partition_table_custom.csv'))
     open(os.path.join(proj, 'prj.config'), 'w').write(cfg)
     wm = 'python3 %s/tools/wm/wm.py' % SDK
     run(wm + ' set-soc ' + soc, proj)

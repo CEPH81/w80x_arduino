@@ -12,7 +12,7 @@ se mantienen las mismas placas y la misma estructura (`boards.txt`, `platform.tx
 `cores/w806`, `variants/*`, `libraries`), pero el núcleo está reescrito sobre los
 drivers del SDK nuevo.
 
-> **Estado: versión de prueba 0.9.7.** Núcleo (GPIO, `Serial`…`Serial5`, tiempos, ADC, PWM,
+> **Estado: versión de prueba 0.9.8.** Núcleo (GPIO, `Serial`…`Serial5`, tiempos, ADC, PWM,
 > interrupciones, FreeRTOS), librerías Wire, SPI, EEPROM, Preferences y HardwareTimer, y **WiFi**
 > (estación, punto de acceso, búsqueda de redes, TCP, UDP, MQTT). Todo compila para las 6 placas;
 > probado en HLK-W801-KIT (carga, Blink, WiFi, servidor web, ADC, temperatura) y HLK-W806-KIT (carga, LED).
@@ -22,9 +22,9 @@ drivers del SDK nuevo.
 | W800 (HLK-W800-KIT) | W800 | 1,9 MB | sí |
 | W801 (HLK-W801-KIT) | W801S | 1,9 MB | sí |
 | W802 | W802 | 1,9 MB | sí |
-| W806 (HLK-W806-KIT) | W806 | 1 MB | no |
+| W806 (HLK-W806-KIT) | W806 | 931 KB | no |
 | Air101 | W800 | 1,9 MB | sí |
-| Air103 | W806 | 1 MB | no |
+| Air103 | W806 | 931 KB | no |
 
 ## Instalación (Gestor de placas)
 
@@ -53,6 +53,11 @@ Compilador disponible para **Windows y Linux** (x86-64).
 - **Velocidad de carga**: 2 M (por defecto) a 115200 baudios. Si falla, baje la velocidad.
 - **Borrar flash**: solo el programa, o toda la flash (se conserva la calibración de RF).
 - **Mensajes del SDK**: nivel de los mensajes del sistema por `Serial` (por defecto, solo avisos y errores).
+
+> W806 y Air103 (1 MB de flash) usan una tabla de particiones propia: programa hasta 931 KB y
+> NVS (EEPROM, Preferences, calibración del ADC) en los últimos 32 KB. La del SDK suponía 2 MB.
+> Si en una de estas placas ve `partition app exceeds flash size` o `read pt nvs fail`,
+> actualice a la 0.9.8 y cargue una vez con **Borrar flash → Toda la flash**.
 
 > La primera carga en una placa que tenía firmware del núcleo anterior (o de fábrica)
 > debe hacerse por **puerto serie**: el SDK nuevo usa otro bootloader y otra tabla de particiones.
