@@ -1,10 +1,10 @@
-# W80x (WM IoT SDK) - plataforma Arduino para WinnerMicro W800, W801, W802,
+# W80x IoT Core by MikrocontrollerCephs - plataforma Arduino para WinnerMicro W800, W801, W802,
 # W806, Air101 y Air103, sobre WM IoT SDK v2.4 (FreeRTOS).
 #
 # Especificacion: https://arduino.github.io/arduino-cli/latest/platform-specification/
 
-name=W80x (WM IoT SDK)
-version=0.9.3
+name=W80x IoT Core by MikrocontrollerCephs
+version=0.9.4
 
 # ------------------------------------------------------------------ rutas
 sdk.path={runtime.platform.path}/sdk

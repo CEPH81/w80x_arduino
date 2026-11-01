@@ -2,7 +2,7 @@
   "packages": [
     {
       "name": "w80x_wmsdk",
-      "maintainer": "CEPH81 (basado en w80x_arduino de board707 y WM IoT SDK de WinnerMicro)",
+      "maintainer": "MikrocontrollerCephs (CEPH81) - basado en w80x_arduino de board707 y WM IoT SDK de WinnerMicro",
       "websiteURL": "https://github.com/CEPH81/w80x_arduino/tree/wm-iot-sdk",
       "email": "",
       "help": {
@@ -10,14 +10,14 @@
       },
       "platforms": [
         {
-          "name": "W80x (WM IoT SDK)",
+          "name": "W80x IoT Core by MikrocontrollerCephs",
           "architecture": "w80x",
-          "version": "0.9.3",
+          "version": "0.9.4",
           "category": "Contributed",
-          "url": "https://raw.githubusercontent.com/CEPH81/w80x_arduino/paquetes/w80x_wmsdk-0.9.3.tar.bz2",
-          "archiveFileName": "w80x_wmsdk-0.9.3.tar.bz2",
-          "checksum": "SHA-256:974c39e973a1b33c1bb8a436f3dec507e8389ce8e6f940c38a59a4c026973e6b",
-          "size": "13355921",
+          "url": "https://raw.githubusercontent.com/CEPH81/w80x_arduino/paquetes/w80x_wmsdk-0.9.4.tar.bz2",
+          "archiveFileName": "w80x_wmsdk-0.9.4.tar.bz2",
+          "checksum": "SHA-256:3150fb1cba14e56ab4712e24d16c77319bb5e03458d2a4bdc58444669e6b672a",
+          "size": "13354517",
           "help": {
             "online": "https://github.com/CEPH81/w80x_arduino/tree/wm-iot-sdk"
           },

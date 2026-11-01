@@ -110,7 +110,7 @@ def main():
             {"packager": PAQUETE, "name": "w80x_tool", "version": "v1.0"}]
     indice = {"packages": [{
         "name": PAQUETE,
-        "maintainer": "CEPH81 (basado en w80x_arduino de board707 y WM IoT SDK de WinnerMicro)",
+        "maintainer": "MikrocontrollerCephs (CEPH81) - basado en w80x_arduino de board707 y WM IoT SDK de WinnerMicro",
         "websiteURL": "https://github.com/%s/tree/wm-iot-sdk" % REPO,
         "email": "",
         "help": {"online": "https://github.com/%s/tree/wm-iot-sdk" % REPO},

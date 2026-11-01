@@ -20,7 +20,7 @@ SPEED = [2000000, 1000000, 921600, 460800, 115200]
 LOG = [('warn', 'Avisos y errores', 2), ('none', 'Ninguno', 0), ('error', 'Errores', 1),
        ('info', 'Informacion', 3), ('debug', 'Depuracion', 4)]
 
-out = ['# Placas W80x (WM IoT SDK). Generado por tools/sdk_builder/gen_boards.py', '',
+out = ['# Placas W80x IoT Core by MikrocontrollerCephs. Generado por tools/sdk_builder/gen_boards.py', '',
        'menu.cpu_frq=Frecuencia de CPU', 'menu.opt=Optimizacion', 'menu.upload_method=Metodo de carga',
        'menu.upload_speed=Velocidad de carga', 'menu.erase=Borrar flash', 'menu.log=Mensajes del SDK', '']
 for bid, name, var, soc, mx in BOARDS:

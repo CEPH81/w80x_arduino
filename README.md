@@ -1,13 +1,18 @@
-# W80x (WM IoT SDK) para Arduino IDE 2.x
+# W80x IoT Core by MikrocontrollerCephs
 
-Núcleo Arduino para los microcontroladores **WinnerMicro W80x** (CPU XT804 a 240 MHz),
+**Núcleo Arduino (IDE 2.x) para los microcontroladores WinnerMicro W800, W801, W802 y W806**,
+hecho y mantenido por [MikrocontrollerCephs](https://www.youtube.com/@mikrocontrollersceph)
+(canal de YouTube de electrónica y microcontroladores).
+No es un producto oficial de WinnerMicro.
+
+Funciona con los microcontroladores **WinnerMicro W80x** (CPU XT804 a 240 MHz),
 construido sobre el SDK oficial **WM IoT SDK v2.4** (FreeRTOS) de WinnerMicro.
 Es un *fork* de [w80x_arduino de board707](https://github.com/board707/w80x_arduino):
 se mantienen las mismas placas y la misma estructura (`boards.txt`, `platform.txt`,
 `cores/w806`, `variants/*`, `libraries`), pero el núcleo está reescrito sobre los
 drivers del SDK nuevo.
 
-> **Estado: versión de prueba 0.9.3.** Núcleo (GPIO, `Serial`…`Serial5`, tiempos, ADC, PWM,
+> **Estado: versión de prueba 0.9.4.** Núcleo (GPIO, `Serial`…`Serial5`, tiempos, ADC, PWM,
 > interrupciones, FreeRTOS), librerías Wire, SPI, EEPROM, Preferences y HardwareTimer, y **WiFi**
 > (estación, punto de acceso, búsqueda de redes, TCP, UDP, MQTT). Todo compila para las 6 placas;
 > falta probarlo en hardware.
@@ -27,7 +32,7 @@ drivers del SDK nuevo.
    ```
    https://raw.githubusercontent.com/CEPH81/w80x_arduino/wm-iot-sdk/package_w80x_wmsdk_index.json
    ```
-2. **Herramientas → Placa → Gestor de placas**, busque **W80x (WM IoT SDK)** e instale.
+2. **Herramientas → Placa → Gestor de placas**, busque **W80x IoT Core** e instale.
    Se descargan también el compilador C-SKY y `wm_tool` (los mismos del paquete de board707).
 
 Puede convivir con el paquete `w80x_duino` de board707: son paquetes distintos.

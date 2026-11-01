@@ -1,4 +1,4 @@
-# Placas W80x (WM IoT SDK). Generado por tools/sdk_builder/gen_boards.py
+# Placas W80x IoT Core by MikrocontrollerCephs. Generado por tools/sdk_builder/gen_boards.py
 
 menu.cpu_frq=Frecuencia de CPU
 menu.opt=Optimizacion
