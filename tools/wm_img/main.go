@@ -101,6 +101,10 @@ func main() {
 		cklinkMain(os.Args[2:])
 		return
 	}
+	if len(os.Args) > 1 && os.Args[1] == "serial" {
+		serialMain(os.Args[2:])
+		return
+	}
 	elfPath := flag.String("elf", "", "programa .elf")
 	boot := flag.String("boot", "", "bootloader.img")
 	pt := flag.String("pt", "", "partition_table.img")

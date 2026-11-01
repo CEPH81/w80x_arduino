@@ -12,10 +12,10 @@ se mantienen las mismas placas y la misma estructura (`boards.txt`, `platform.tx
 `cores/w806`, `variants/*`, `libraries`), pero el núcleo está reescrito sobre los
 drivers del SDK nuevo.
 
-> **Estado: versión de prueba 0.9.4.** Núcleo (GPIO, `Serial`…`Serial5`, tiempos, ADC, PWM,
+> **Estado: versión de prueba 0.9.5.** Núcleo (GPIO, `Serial`…`Serial5`, tiempos, ADC, PWM,
 > interrupciones, FreeRTOS), librerías Wire, SPI, EEPROM, Preferences y HardwareTimer, y **WiFi**
 > (estación, punto de acceso, búsqueda de redes, TCP, UDP, MQTT). Todo compila para las 6 placas;
-> falta probarlo en hardware.
+> probado en HLK-W801-KIT (carga, Blink, WiFi, servidor web, ADC, temperatura) y HLK-W806-KIT (carga, LED).
 
 | Placa | Chip | Flash para el programa | WiFi/BLE |
 |---|---|---|---|
@@ -45,6 +45,9 @@ Compilador disponible para **Windows y Linux** (x86-64).
 - **Método de carga**:
   - *Puerto serie (USB)*: `wm_tool` reinicia el chip por RTS y graba el `.fls`
     (bootloader + programa + tabla de particiones). No toca la calibración de RF ni NVS.
+    Al terminar, `wm_img` saca al chip del modo de carga con la orden de reinicio del SDK,
+    así el programa arranca solo, sin pulsar RST. Al final de la carga se ve
+    *«Chip reiniciado: programa en marcha.»*
   - *Depurador CK-Link*: graba por JTAG con **XuanTie (T-Head) Debugger Server**
     (ver más abajo). No necesita puerto.
 - **Velocidad de carga**: 2 M (por defecto) a 115200 baudios. Si falla, baje la velocidad.
