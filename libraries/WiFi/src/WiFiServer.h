@@ -14,7 +14,7 @@
 class WiFiServer : public Server
 {
 public:
-    explicit WiFiServer(uint16_t port = 80, uint8_t max_clients = 4) : _fd(-1), _port(port), _max(max_clients), _noDelay(false) {}
+    explicit WiFiServer(uint16_t port = 80, uint8_t max_clients = 4) : _fd(-1), _port(port), _max(max_clients), _noDelay(true) {}
     ~WiFiServer() { end(); }
 
     void begin() override { begin(_port); }
@@ -25,6 +25,7 @@ public:
     WiFiClient accept();
     WiFiClient available() { return accept(); }
     bool hasClient();
+    /* por defecto sin retardo de Nagle: las respuestas cortas salen al momento */
     void setNoDelay(bool nodelay) { _noDelay = nodelay; }
     bool getNoDelay() { return _noDelay; }
     operator bool() { return _fd >= 0; }

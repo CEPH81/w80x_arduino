@@ -14,7 +14,7 @@ BOARDS = [
     ('air103', 'Air103',               'air103', 'w806',  0xFFC00),
 ]
 CPU = [240, 160, 120, 80, 40]
-OPT = [('size', 'Tamano (-Os)', '-Os'), ('o2', 'Velocidad (-O2)', '-O2'),
+OPT = [('o2', 'Velocidad (-O2)', '-O2'), ('size', 'Tamano (-Os)', '-Os'),
        ('o3', 'Maxima velocidad (-O3)', '-O3'), ('debug', 'Depuracion (-Og)', '-Og')]
 SPEED = [2000000, 1000000, 921600, 460800, 115200]
 LOG = [('warn', 'Avisos y errores', 2), ('none', 'Ninguno', 0), ('error', 'Errores', 1),

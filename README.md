@@ -7,7 +7,7 @@ se mantienen las mismas placas y la misma estructura (`boards.txt`, `platform.tx
 `cores/w806`, `variants/*`, `libraries`), pero el núcleo está reescrito sobre los
 drivers del SDK nuevo.
 
-> **Estado: versión de prueba 0.9.1.** Núcleo (GPIO, `Serial`…`Serial5`, tiempos, ADC, PWM,
+> **Estado: versión de prueba 0.9.3.** Núcleo (GPIO, `Serial`…`Serial5`, tiempos, ADC, PWM,
 > interrupciones, FreeRTOS), librerías Wire, SPI, EEPROM, Preferences y HardwareTimer, y **WiFi**
 > (estación, punto de acceso, búsqueda de redes, TCP, UDP, MQTT). Todo compila para las 6 placas;
 > falta probarlo en hardware.
@@ -36,7 +36,7 @@ Compilador disponible para **Windows y Linux** (x86-64).
 ## Menús de la placa
 
 - **Frecuencia de CPU**: 240 (por defecto), 160, 120, 80 o 40 MHz.
-- **Optimización**: tamaño (`-Os`), velocidad (`-O2`/`-O3`) o depuración (`-Og`).
+- **Optimización**: velocidad (`-O2`, por defecto), tamaño (`-Os`), máxima velocidad (`-O3`) o depuración (`-Og`). El SDK va compilado con `-O2`.
 - **Método de carga**:
   - *Puerto serie (USB)*: `wm_tool` reinicia el chip por RTS y graba el `.fls`
     (bootloader + programa + tabla de particiones). No toca la calibración de RF ni NVS.
@@ -94,6 +94,26 @@ void setup() {
 - MQTT: instale **PubSubClient** desde el Gestor de librerías y vea el ejemplo `MQTT_PubSubClient`.
 - Un programa con WiFi ocupa unos 560 KB (cabe de sobra en los 1,9 MB).
 
+## ADC y temperatura interna
+
+- **Entrada de 0 a 2,4 V como máximo.** Para tensiones mayores use un divisor de resistencias.
+  Las lecturas por encima se dan como 2400 mV (o 4095).
+- `analogReadMilliVolts(A0)`: milivoltios con la calibración de fábrica del chip (si la trae;
+  `analogFactoryCalibrated()` lo dice) y la propia, si se hizo.
+- `analogReadAveraging(16)`: promedia varias muestras en cada lectura (menos ruido).
+- **Calibración propia de dos puntos**: ejemplo *BasicsExamples → ADC_Calibracion*, con un multímetro.
+  Se guarda en la flash y se aplica en todos los programas. `analogCalibrationReset()` la borra.
+- `temperatureRead()`: temperatura del chip en °C (ejemplo *Temperatura_interna*). Mide el silicio:
+  suele dar unos grados más que el ambiente.
+- `analogReadVddMilliVolts()`: tensión de alimentación del chip.
+
+## Rendimiento
+
+- Interrupciones de GPIO: despachador propio en RAM que solo atiende las patas con interrupción pendiente.
+- `digitalWrite`/`digitalRead`: acceso directo a registros.
+- WiFi: `WiFiClient` lee por bloques (cada llamada a lwIP es un mensaje entre tareas) y los
+  servidores responden sin el retardo de Nagle (`setNoDelay(true)` por defecto).
+
 ## Diferencias con el núcleo anterior (board707)
 
 - El programa corre en una tarea de FreeRTOS (`loopTask`, 8 KB de pila). Se pueden crear
@@ -101,7 +121,8 @@ void setup() {
 - `analogRead()` devuelve un valor de **12 bits** (0…4095, cambiable con
   `analogReadResolution()`); `analogReadMilliVolts()` devuelve milivoltios (antes
   `analogRead()` devolvía milivoltios). Entrada de 0 a 2,4 V.
-- `analogWrite(pata, 0…255)`: PWM de 8 bits, 1 kHz por defecto (`analogWriteFrequency()`).
+- `analogWrite(pata, 0…255)`: PWM, 1 kHz por defecto. `analogWriteFrequency(hz)`: hasta 156 kHz
+  con 255 pasos; por encima, menos pasos (máximo 20 MHz). `analogWriteGetFrequency()` da la real.
   Las patas que comparten canal llevan la misma señal (ver `variants/<placa>/pins_arduino.h`).
 - `attachInterrupt(pata, función, RISING | FALLING | CHANGE | ONLOW | ONHIGH)`.
 - `Serial.printf()`, `Serial1`…`Serial5` con las patas por defecto del SDK (ver

@@ -155,8 +155,15 @@ uint32_t analogReadMilliVolts(uint8_t pin);  /* tension en mV (calibrada de fabr
 void analogReadResolution(uint8_t bits);
 void analogReference(uint8_t mode);          /* sin efecto: referencia interna fija */
 void analogWrite(uint8_t pin, int value);    /* PWM, 0..255 por defecto */
-void analogWriteResolution(uint8_t bits);    /* 1..8 bits (el PWM del W80x es de 8 bits) */
-void analogWriteFrequency(uint32_t freq);    /* Hz, por defecto 1000 */
+void analogWriteResolution(uint8_t bits);    /* 1..16 bits (el PWM tiene hasta 255 pasos reales) */
+void analogWriteFrequency(uint32_t freq);    /* Hz, por defecto 1000; hasta 156 kHz con 255 pasos, 20 MHz maximo */
+void analogReadAveraging(uint8_t samples);   /* muestras promediadas por lectura (1..64) */
+uint32_t analogReadUncalibratedMilliVolts(uint8_t pin); /* sin la calibracion propia */
+bool analogCalibrate(uint32_t read1_mv, uint32_t real1_mv, uint32_t read2_mv, uint32_t real2_mv);
+void analogCalibrationReset(void);           /* vuelve a la calibracion de fabrica */
+bool analogFactoryCalibrated(void);          /* el chip trae calibracion de fabrica */
+uint32_t analogReadVddMilliVolts(void);      /* tension de alimentacion del chip */
+uint32_t analogWriteGetFrequency(void);      /* frecuencia real del PWM, Hz */
 int w80x_pin_pwm_channel(uint8_t pin);       /* -1 si la pata no tiene PWM */
 int w80x_pin_adc_channel(uint8_t pin);       /* -1 si la pata no es analogica */
 float temperatureRead(void);                 /* sensor interno, grados C */

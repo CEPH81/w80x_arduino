@@ -15,6 +15,7 @@
 #include "wm_heap.h"
 #include "wm_utils.h"
 #include "wm_drv_rng.h"
+#include "wm_drv_rcc.h"
 
 void w80x_interrupts(void)
 {
@@ -84,9 +85,12 @@ void yield(void)
     }
 }
 
+/* frecuencia real configurada en el reloj (la del menu "Frecuencia de CPU") */
 uint32_t getCpuFrequencyMhz(void)
 {
-    return F_CPU / 1000000UL;
+    wm_device_t *rcc = wm_dt_get_device_by_name("rcc");
+    int mhz          = rcc ? wm_drv_rcc_get_config_clock(rcc, WM_RCC_TYPE_CPU) : 0;
+    return mhz > 0 ? (uint32_t)mhz : F_CPU / 1000000UL;
 }
 
 uint32_t getFreeHeap(void)

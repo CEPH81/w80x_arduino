@@ -4,7 +4,7 @@
 # Especificacion: https://arduino.github.io/arduino-cli/latest/platform-specification/
 
 name=W80x (WM IoT SDK)
-version=0.9.2
+version=0.9.3
 
 # ------------------------------------------------------------------ rutas
 sdk.path={runtime.platform.path}/sdk
@@ -29,7 +29,7 @@ compiler.warning_flags.default=
 compiler.warning_flags.more=-Wall
 compiler.warning_flags.all=-Wall -Wextra
 
-build.flags.optimize=-Os
+build.flags.optimize=-O2
 build.extra_flags=
 build.log_level=2
 

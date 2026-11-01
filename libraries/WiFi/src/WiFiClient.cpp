@@ -21,7 +21,7 @@ static void graceful_close(int fd)
     ::lwip_shutdown(fd, SHUT_WR); /* FIN: lo enviado se entrega */
     uint8_t buf[64];
     uint32_t t0 = millis();
-    while (millis() - t0 < 100) {
+    while (millis() - t0 < 50) {
         int r = ::lwip_recv(fd, buf, sizeof(buf), MSG_DONTWAIT);
         if (r > 0) {
             continue;
@@ -34,18 +34,46 @@ static void graceful_close(int fd)
     ::lwip_close(fd);
 }
 
+/* conexion compartida entre copias del WiFiClient, con buffer de recepcion:
+   cada lwip_recv() es un mensaje a la tarea de lwIP, asi que leer de a un
+   byte (readStringUntil, parseInt...) era lento */
+#define RX_BUF 512
+
 class WiFiClientSocket
 {
 public:
-    explicit WiFiClientSocket(int f) : fd(f), refs(1), peeked(-1), closed(false) {}
+    explicit WiFiClientSocket(int f) : fd(f), refs(1), closed(false), pos(0), len(0) {}
     ~WiFiClientSocket()
     {
         graceful_close(fd);
     }
+    /* trae lo que haya llegado, sin esperar; devuelve los bytes en el buffer */
+    size_t fill()
+    {
+        if (pos >= len) {
+            pos = len = 0;
+        }
+        if (fd < 0 || closed || len == RX_BUF) {
+            return len - pos;
+        }
+        if (pos > 0) {
+            memmove(buf, buf + pos, len - pos);
+            len -= pos;
+            pos = 0;
+        }
+        int r = ::lwip_recv(fd, buf + len, RX_BUF - len, MSG_DONTWAIT);
+        if (r > 0) {
+            len += r;
+        } else if (r == 0 || (errno != EAGAIN && errno != EWOULDBLOCK)) {
+            closed = true;
+        }
+        return len - pos;
+    }
     int fd;
     int refs;
-    int peeked; /* byte leido con peek() aun no entregado */
     bool closed;
+    size_t pos, len;
+    uint8_t buf[RX_BUF];
 };
 
 WiFiClient::WiFiClient() : _sock(nullptr), _timeout_ms(3000) {}
@@ -223,11 +251,12 @@ int WiFiClient::available()
     if (!_sock) {
         return 0;
     }
-    int n = 0;
-    if (::lwip_ioctl(_sock->fd, FIONREAD, &n) < 0) {
-        n = 0;
+    size_t n = _sock->fill();
+    int more = 0;
+    if (_sock->fd >= 0 && ::lwip_ioctl(_sock->fd, FIONREAD, &more) < 0) {
+        more = 0;
     }
-    return n + (_sock->peeked >= 0 ? 1 : 0);
+    return (int)n + more;
 }
 
 int WiFiClient::read(uint8_t *buf, size_t size)
@@ -236,18 +265,17 @@ int WiFiClient::read(uint8_t *buf, size_t size)
         return -1;
     }
     size_t got = 0;
-    if (_sock->peeked >= 0) {
-        buf[got++]    = (uint8_t)_sock->peeked;
-        _sock->peeked = -1;
+    if (_sock->fill() == 0) {
+        return -1;
     }
-    if (got < size) {
-        int r = ::lwip_recv(_sock->fd, buf + got, size - got, MSG_DONTWAIT);
-        if (r > 0) {
-            got += r;
-        } else if (r == 0) {
-            _sock->closed = true;
-        } else if (errno != EAGAIN && errno != EWOULDBLOCK) {
-            _sock->closed = true;
+    while (got < size && _sock->pos < _sock->len) {
+        size_t n = _sock->len - _sock->pos;
+        if (n > size - got) n = size - got;
+        memcpy(buf + got, _sock->buf + _sock->pos, n);
+        _sock->pos += n;
+        got += n;
+        if (got < size && _sock->fill() == 0) {
+            break;
         }
     }
     return got > 0 ? (int)got : -1;
@@ -255,25 +283,18 @@ int WiFiClient::read(uint8_t *buf, size_t size)
 
 int WiFiClient::read()
 {
-    uint8_t b;
-    return read(&b, 1) == 1 ? b : -1;
+    if (!_sock || _sock->fill() == 0) {
+        return -1;
+    }
+    return _sock->buf[_sock->pos++];
 }
 
 int WiFiClient::peek()
 {
-    if (!_sock) {
+    if (!_sock || _sock->fill() == 0) {
         return -1;
     }
-    if (_sock->peeked < 0) {
-        uint8_t b;
-        int r = ::lwip_recv(_sock->fd, &b, 1, MSG_DONTWAIT);
-        if (r == 1) {
-            _sock->peeked = b;
-        } else if (r == 0) {
-            _sock->closed = true;
-        }
-    }
-    return _sock->peeked;
+    return _sock->buf[_sock->pos];
 }
 
 void WiFiClient::stop()
@@ -294,23 +315,10 @@ uint8_t WiFiClient::connected()
     if (!_sock || _sock->fd < 0) {
         return 0;
     }
-    if (available() > 0) {
+    if (_sock->fill() > 0) {
         return 1; /* aun quedan datos por leer */
     }
-    if (_sock->closed) {
-        return 0;
-    }
-    uint8_t b;
-    int r = ::lwip_recv(_sock->fd, &b, 1, MSG_DONTWAIT | MSG_PEEK);
-    if (r == 0) {
-        _sock->closed = true;
-        return 0;
-    }
-    if (r < 0 && errno != EAGAIN && errno != EWOULDBLOCK) {
-        _sock->closed = true;
-        return 0;
-    }
-    return 1;
+    return _sock->closed ? 0 : 1;
 }
 
 static bool sock_addr(int fd, bool peer, struct sockaddr_in *a)
