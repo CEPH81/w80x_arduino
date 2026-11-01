@@ -4,7 +4,7 @@
 # Especificacion: https://arduino.github.io/arduino-cli/latest/platform-specification/
 
 name=W80x IoT Core by MikrocontrollerCephs
-version=0.9.8
+version=0.9.9
 
 # ------------------------------------------------------------------ rutas
 sdk.path={runtime.platform.path}/sdk

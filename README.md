@@ -12,7 +12,7 @@ se mantienen las mismas placas y la misma estructura (`boards.txt`, `platform.tx
 `cores/w806`, `variants/*`, `libraries`), pero el núcleo está reescrito sobre los
 drivers del SDK nuevo.
 
-> **Estado: versión de prueba 0.9.8.** Núcleo (GPIO, `Serial`…`Serial5`, tiempos, ADC, PWM,
+> **Estado: versión de prueba 0.9.9.** Núcleo (GPIO, `Serial`…`Serial5`, tiempos, ADC, PWM,
 > interrupciones, FreeRTOS), librerías Wire, SPI, EEPROM, Preferences y HardwareTimer, y **WiFi**
 > (estación, punto de acceso, búsqueda de redes, TCP, UDP, MQTT). Todo compila para las 6 placas;
 > probado en HLK-W801-KIT (carga, Blink, WiFi, servidor web, ADC, temperatura) y HLK-W806-KIT (carga, LED).
@@ -85,6 +85,7 @@ tabla de particiones y programa) y el chip se reinicia.
 | **HardwareTimer** | 6 temporizadores en µs o ms con interrupción (misma interfaz que antes) | `Tim_Led_Irq` |
 | **WiFi** | `WiFi.begin`, `softAP`, `scanNetworks`, `WiFiClient`, `WiFiServer`, `WiFiUDP` (interfaz del ESP32). Solo W800, W801, W802 y Air101 | `WiFiScan`, `WiFiClientBasic`, `WiFiWebServer`, `WiFiAccessPoint`, `WiFiUDPNtp`, `MQTT_PubSubClient` |
 | **BasicsExamples** | ejemplos del núcleo: Blink, Autoprueba, ADC, calibración, temperatura, PWM, servo, interrupciones y **puerto serie** | `Serial_Eco`, `Serial_Comandos` (órdenes de texto con `serialEvent()`), `Serial_Puente` (`Serial1` en PB6/PB7 hacia un módulo), `Serial_Puertos` (lista y prueba los puertos de cada placa) |
+| **W80x_Log** | log por niveles en color, estilo `esp_log` (`LOGE`, `LOGW`, `LOGI`, `LOGD`, `LOGV`), con la misma interfaz que `CH579_Log` de la CH579M; seguro entre tareas y con nombre de tarea opcional | `LogDemo`, `LogTareas`, `LogSerial` |
 | LiquidCrystal, SD, GyverOLED | las de board707, sin cambios (salvo detectar la placa) | las suyas |
 
 Las patas por defecto de cada puerto están al principio de `variants/<placa>/pins_arduino.h`;
