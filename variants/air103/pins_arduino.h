@@ -35,6 +35,16 @@ enum pins {
 #define PIN_WIRE_SCL (PA1)
 #define PIN_SERIAL_TX (PB19)
 #define PIN_SERIAL_RX (PB20)
+#define PIN_SERIAL1_TX (PB6)
+#define PIN_SERIAL1_RX (PB7)
+#define PIN_SERIAL2_TX (PB2)
+#define PIN_SERIAL2_RX (PB3)
+#define PIN_SERIAL3_TX (PA5)
+#define PIN_SERIAL3_RX (PA6)
+#define PIN_SERIAL4_TX (PA8)
+#define PIN_SERIAL4_RX (PA9)
+#define PIN_SERIAL5_TX (PB18)
+#define PIN_SERIAL5_RX (PB17)
 
 #define W80X_UART_COUNT 6
 #define NUM_DIGITAL_PINS 44

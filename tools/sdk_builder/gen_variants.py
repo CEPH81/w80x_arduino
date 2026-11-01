@@ -207,6 +207,8 @@ def gen_pins_arduino(variant, soc, pins, dt_src):
             uarts.append((u, p))
     ser = '\n'.join(' *   %-7s TX %-4s RX %s' % ('Serial' + (str(u) if u else ''), PAD[p[0]], PAD[p[1]])
                     for u, p in uarts)
+    serpins = '\n'.join('#define PIN_SERIAL%d_TX (%s)\n#define PIN_SERIAL%d_RX (%s)' % (u, PAD[p[0]], u, PAD[p[1]])
+                        for u, p in uarts if u)
     pwm = sorted(n for n, (_, f) in pins.items() if any(re.fullmatch(r'PWM\d', x) for x in f))
     return f'''/*
  * pins_arduino.h - patas de la placa {variant} (chip {soc.upper()}).
@@ -234,6 +236,7 @@ enum pins {{
 #define PIN_WIRE_SCL ({PAD[i2c[0]]})
 #define PIN_SERIAL_TX ({PAD[uarts[0][1][0]]})
 #define PIN_SERIAL_RX ({PAD[uarts[0][1][1]]})
+{serpins}
 
 #define W80X_UART_COUNT {len(uarts)}
 #define NUM_DIGITAL_PINS {last + 1}

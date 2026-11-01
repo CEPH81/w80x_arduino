@@ -11,46 +11,50 @@
  *   GND        --  GND del modulo        (senales de 3,3 V)
  *
  * Prueba sin modulo: una PB6 con PB7 con un cable. Al arrancar se hace una prueba
- * de lazo y todo lo que escriba le vuelve como "[Serial1]".
+ * de lazo y todo lo que escriba le vuelve como "[modulo]".
  *
- * Otros puertos (ver variants/<placa>/pins_arduino.h):
- *   Serial2 TX PB2  RX PB3   (en la HLK-W806, PB2 es un LED)
- *   Serial3 TX PA5  RX PA6
- *   Serial4 TX PA8  RX PA9
- *   Serial5 TX PB18 RX PB17
- * Tambien se pueden elegir otras patas: Serial1.begin(9600, SERIAL_8N1, rx, tx);
+ * Serial1 esta en PB6/PB7 en todas las placas (W800, W801, W802, W806, Air101, Air103).
+ * Para usar otro puerto cambie PUERTO (por ejemplo Serial3); el ejemplo Serial_Puertos
+ * muestra las patas de cada puerto en su placa. Tambien se pueden elegir otras patas:
+ *   Serial1.begin(9600, SERIAL_8N1, rx, tx);
  */
 
 #define VELOCIDAD_MODULO 9600   // la del modulo conectado (HC-05: 9600, GPS: 9600...)
+#define PUERTO  Serial1          // puerto hacia el modulo
+#define PUERTO_TX PIN_SERIAL1_TX // sus patas (solo para mostrarlas)
+#define PUERTO_RX PIN_SERIAL1_RX
+
+String pata(uint8_t p) { return String(p < 16 ? "PA" : "PB") + String(p < 16 ? p : p - 16); }
 
 void setup() {
   Serial.begin(115200);
-  Serial1.begin(VELOCIDAD_MODULO);   // TX PB6, RX PB7
+  PUERTO.begin(VELOCIDAD_MODULO);
   delay(300);
   Serial.println("\n=== Serial_Puente ===");
-  Serial.printf("Serial1 a %d baudios (TX PB6, RX PB7)\n", VELOCIDAD_MODULO);
+  Serial.printf("Puerto a %d baudios (TX %s, RX %s)\n", VELOCIDAD_MODULO,
+                pata(PUERTO_TX).c_str(), pata(PUERTO_RX).c_str());
 
   // prueba de lazo: si PB6 y PB7 estan unidas, el texto vuelve
-  while (Serial1.available()) Serial1.read();
-  Serial1.print("hola");
-  Serial1.flush();
+  while (PUERTO.available()) PUERTO.read();
+  PUERTO.print("hola");
+  PUERTO.flush();
   delay(20);
   char eco[8] = {0};
-  Serial1.readBytes(eco, 4);
-  if (strcmp(eco, "hola") == 0) Serial.println("Prueba de lazo PB6-PB7: correcta");
-  else Serial.println("Sin lazo PB6-PB7 (normal si hay un modulo conectado)");
-  Serial.println("Escriba en el Monitor serie para enviar por Serial1.");
+  PUERTO.readBytes(eco, 4);
+  if (strcmp(eco, "hola") == 0) Serial.println("Prueba de lazo TX-RX: correcta");
+  else Serial.println("Sin lazo TX-RX (normal si hay un modulo conectado)");
+  Serial.println("Escriba en el Monitor serie para enviar al modulo.");
 }
 
 void loop() {
   // PC -> modulo
-  while (Serial.available()) Serial1.write(Serial.read());
+  while (Serial.available()) PUERTO.write(Serial.read());
 
   // modulo -> PC, por lineas para marcarlas
   static bool inicio = true;
-  while (Serial1.available()) {
-    char c = Serial1.read();
-    if (inicio) { Serial.print("[Serial1] "); inicio = false; }
+  while (PUERTO.available()) {
+    char c = PUERTO.read();
+    if (inicio) { Serial.print("[modulo] "); inicio = false; }
     Serial.write(c);
     if (c == '\n') inicio = true;
   }

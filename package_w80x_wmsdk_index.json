@@ -12,12 +12,12 @@
         {
           "name": "W80x IoT Core by MikrocontrollerCephs",
           "architecture": "w80x",
-          "version": "0.9.6",
+          "version": "0.9.7",
           "category": "Contributed",
-          "url": "https://raw.githubusercontent.com/CEPH81/w80x_arduino/paquetes/w80x_wmsdk-0.9.6.tar.bz2",
-          "archiveFileName": "w80x_wmsdk-0.9.6.tar.bz2",
-          "checksum": "SHA-256:849f8d8309de1558046bddba8931060c8a53e625f920a1296fd016602752ae63",
-          "size": "13376631",
+          "url": "https://raw.githubusercontent.com/CEPH81/w80x_arduino/paquetes/w80x_wmsdk-0.9.7.tar.bz2",
+          "archiveFileName": "w80x_wmsdk-0.9.7.tar.bz2",
+          "checksum": "SHA-256:f7dad44d62498548ca2505ddcca6a62424e2ef17fa68ab078719414b732a3a59",
+          "size": "13378459",
           "help": {
             "online": "https://github.com/CEPH81/w80x_arduino/tree/wm-iot-sdk"
           },

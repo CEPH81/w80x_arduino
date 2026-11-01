@@ -12,7 +12,7 @@ se mantienen las mismas placas y la misma estructura (`boards.txt`, `platform.tx
 `cores/w806`, `variants/*`, `libraries`), pero el núcleo está reescrito sobre los
 drivers del SDK nuevo.
 
-> **Estado: versión de prueba 0.9.6.** Núcleo (GPIO, `Serial`…`Serial5`, tiempos, ADC, PWM,
+> **Estado: versión de prueba 0.9.7.** Núcleo (GPIO, `Serial`…`Serial5`, tiempos, ADC, PWM,
 > interrupciones, FreeRTOS), librerías Wire, SPI, EEPROM, Preferences y HardwareTimer, y **WiFi**
 > (estación, punto de acceso, búsqueda de redes, TCP, UDP, MQTT). Todo compila para las 6 placas;
 > probado en HLK-W801-KIT (carga, Blink, WiFi, servidor web, ADC, temperatura) y HLK-W806-KIT (carga, LED).
@@ -79,10 +79,23 @@ tabla de particiones y programa) y el chip se reinicia.
 | **Preferences** | ajustes con nombre, como en el ESP32 (`putInt`, `getString`…) | `Contador` |
 | **HardwareTimer** | 6 temporizadores en µs o ms con interrupción (misma interfaz que antes) | `Tim_Led_Irq` |
 | **WiFi** | `WiFi.begin`, `softAP`, `scanNetworks`, `WiFiClient`, `WiFiServer`, `WiFiUDP` (interfaz del ESP32). Solo W800, W801, W802 y Air101 | `WiFiScan`, `WiFiClientBasic`, `WiFiWebServer`, `WiFiAccessPoint`, `WiFiUDPNtp`, `MQTT_PubSubClient` |
-| **BasicsExamples** | ejemplos del núcleo: Blink, Autoprueba, ADC, calibración, temperatura, PWM, servo, interrupciones y **puerto serie** | `Serial_Eco`, `Serial_Comandos` (órdenes de texto con `serialEvent()`), `Serial_Puente` (`Serial1` en PB6/PB7 hacia un módulo) |
+| **BasicsExamples** | ejemplos del núcleo: Blink, Autoprueba, ADC, calibración, temperatura, PWM, servo, interrupciones y **puerto serie** | `Serial_Eco`, `Serial_Comandos` (órdenes de texto con `serialEvent()`), `Serial_Puente` (`Serial1` en PB6/PB7 hacia un módulo), `Serial_Puertos` (lista y prueba los puertos de cada placa) |
 | LiquidCrystal, SD, GyverOLED | las de board707, sin cambios (salvo detectar la placa) | las suyas |
 
-Las patas por defecto de cada puerto están al principio de `variants/<placa>/pins_arduino.h`.
+Las patas por defecto de cada puerto están al principio de `variants/<placa>/pins_arduino.h`;
+en el programa están como `PIN_SERIAL1_TX`, `PIN_SERIAL1_RX`… `PIN_SERIAL5_RX`.
+
+| Puerto | W800 / Air101 | W801 / W806 / Air103 | W802 |
+|---|---|---|---|
+| `Serial` (USB) | PB19 / PB20 | PB19 / PB20 | PB19 / PB20 |
+| `Serial1` | PB6 / PB7 | PB6 / PB7 | PB6 / PB7 |
+| `Serial2` | PB2 / PB3 | PB2 / PB3 | PB2 / PB3 |
+| `Serial3` | PB0 / PB1 | PA5 / PA6 | PB0 / PB1 |
+| `Serial4` | PB4 / PB5 | PA8 / PA9 | PB4 / PB5 |
+| `Serial5` | — | PB18 / PB17 | PB18 / PB17 |
+
+(TX / RX.) Algunas patas son también LED de la placa (p. ej. PB0–PB2 en la HLK-W806 y la W800,
+PB17/PB18 en la HLK-W801): el ejemplo `Serial_Puertos` lo avisa.
 
 ### WiFi en breve
 
